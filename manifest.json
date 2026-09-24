@@ -1,0 +1,15 @@
+{
+  "name": "MAN BUSINESS STUDIO",
+  "short_name": "MAN BUSINESS",
+  "description": "Studio de création vidéo IA avec avatar parlant",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1a1008",
+  "theme_color": "#1a1008",
+  "lang": "fr",
+  "dir": "ltr",
+  "categories": ["business", "productivity"],
+  "icons": []
+}
