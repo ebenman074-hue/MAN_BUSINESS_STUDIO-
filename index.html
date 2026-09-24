@@ -1,0 +1,2340 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a1008">
+<meta name="description" content="MAN BUSINESS STUDIO — Création vidéo IA">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MAN BUSINESS">
+<link rel="manifest" id="manifest-link">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'%3E%3Crect%20width='512'%20height='512'%20rx='96'%20fill='%231a1008'/%3E%3Ctext%20x='256'%20y='380'%20font-family='Georgia,serif'%20font-size='260'%20font-weight='900'%20text-anchor='middle'%20fill='%23d4a574'%3EMB%3C/text%3E%3C/svg%3E">
+<title>MAN BUSINESS STUDIO</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1a1008; --bg-2:#2a1a10; --bg-3:#0e0805;
+  --panel:rgba(42,26,16,.88); --panel-2:#2a1a10; --panel-3:#3a261a; --panel-4:#4a3220;
+  --line:rgba(212,165,116,.18); --line-2:rgba(212,165,116,.32);
+  --gold:#d4a574; --gold-l:#e8c896; --gold-d:#a67c52; --gold-x:#8b6539;
+  --text:#f5e8d8; --muted:#a89080; --muted-2:#6a5544;
+  --green:#7fc98d; --red:#e08978; --warn:#e8b84a;
+  --shadow:0 18px 60px rgba(0,0,0,.5);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 50% -20%, rgba(212,165,116,.10), transparent 55%),
+    radial-gradient(circle at 80% 110%, rgba(166,124,82,.08), transparent 60%),
+    linear-gradient(180deg,#2a1a10 0%,#1a1008 45%,#0e0805 100%);
+  background-attachment:fixed;
+  color:var(--text);font-size:14px;line-height:1.5;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:#3a261a;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#4a3220}
+.app{max-width:1240px;margin:0 auto;padding:0 1rem 110px}
+.topbar{
+  position:sticky;top:0;z-index:30;
+  background:rgba(26,16,8,.9);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--line);
+  margin:0 -1rem 1rem;
+  padding:.75rem 1rem;
+}
+.topbar-inner{display:flex;justify-content:space-between;align-items:center;gap:.75rem;max-width:1240px;margin:0 auto}
+.menu-toggle{width:42px;height:42px;border:1px solid var(--line);border-radius:12px;background:rgba(212,165,116,.06);color:var(--gold-l);display:grid;place-items:center;flex:0 0 auto}
+.menu-toggle span{display:block;width:18px;height:2px;background:currentColor;border-radius:2px;margin:2px auto}
+.brand{display:flex;align-items:center;gap:.65rem;min-width:0;flex:1}
+.brand-logo{width:38px;height:38px;border-radius:10px;flex-shrink:0;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold-d),var(--gold-l));color:#1a1008;font-weight:900;font-family:Georgia,serif;font-size:1rem;box-shadow:0 4px 16px rgba(212,165,116,.35)}
+.brand-copy{min-width:0}
+.brand-copy h1{font-size:.95rem;font-weight:700;letter-spacing:.03em;color:var(--gold-l);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-copy p{font-size:.62rem;color:var(--muted);margin-top:2px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.header-actions{display:flex;gap:.4rem;align-items:center;flex-shrink:0}
+.status-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:rgba(0,0,0,.25);font-size:.68rem;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.status-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px rgba(212,165,116,.6)}
+.status-chip.ok{border-color:rgba(127,201,141,.35);color:var(--green)}
+.status-chip.ok .dot{background:var(--green)}
+.status-chip.err{border-color:rgba(224,137,120,.35);color:var(--red)}
+.status-chip.err .dot{background:var(--red)}
+.icon-btn-header{width:38px;height:38px;border:1px solid var(--line);border-radius:11px;background:rgba(212,165,116,.06);color:var(--gold-l);display:grid;place-items:center}
+.drawer{position:fixed;inset:0;z-index:70;pointer-events:none}
+.drawer-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.65);opacity:0;transition:.22s}
+.drawer-panel{position:absolute;left:0;top:0;bottom:0;width:min(320px,86vw);background:linear-gradient(180deg,#2a1a10,#1a1008);border-right:1px solid var(--line-2);box-shadow:24px 0 80px rgba(0,0,0,.6);transform:translateX(-102%);transition:.24s;padding:1.25rem 1rem;overflow-y:auto}
+.drawer.open{pointer-events:auto}
+.drawer.open .drawer-backdrop{opacity:1}
+.drawer.open .drawer-panel{transform:translateX(0)}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding-bottom:1rem;border-bottom:1px solid var(--line);margin-bottom:.75rem}
+.drawer-head strong{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-l)}
+.drawer-close{width:34px;height:34px;border:1px solid var(--line);border-radius:10px;background:rgba(212,165,116,.06);color:var(--gold-l)}
+.drawer-section{font-size:.6rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted-2);padding:.85rem .75rem .4rem;font-weight:700}
+.drawer-nav{display:flex;flex-direction:column;gap:4px}
+.drawer-nav button{width:100%;border:1px solid transparent;background:transparent;color:var(--muted);text-align:left;padding:.85rem .9rem;border-radius:11px;font-size:.82rem;display:flex;align-items:center;gap:.7rem}
+.drawer-nav button:hover{background:rgba(212,165,116,.08);color:var(--text)}
+.drawer-nav button.active{background:linear-gradient(135deg,rgba(212,165,116,.18),rgba(232,200,150,.08));border-color:var(--line-2);color:var(--gold-l);box-shadow:inset 3px 0 0 var(--gold)}
+.drawer-nav .nav-svg{width:20px;height:20px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(26,16,8,.96);backdrop-filter:blur(20px);border-top:1px solid var(--line);padding:7px max(8px,env(safe-area-inset-left)) calc(7px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(6,1fr);gap:4px;box-shadow:0 -12px 40px rgba(0,0,0,.4)}
+.bottom-nav button{border:0;background:transparent;color:var(--muted-2);padding:6px 2px 5px;border-radius:11px;font-size:.58rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px}
+.bottom-nav button.active{color:var(--gold-l);background:rgba(212,165,116,.10);box-shadow:inset 0 -2px 0 var(--gold)}
+.bottom-nav .nav-icon{display:grid;place-items:center;height:24px}
+.bottom-nav .nav-svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.bottom-nav .nav-label{font-size:.58rem}
+.view{display:none;animation:fade .25s ease}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.hero{background:linear-gradient(135deg,rgba(212,165,116,.10),rgba(166,124,82,.04));border:1px solid var(--line);border-radius:22px;padding:1.5rem;box-shadow:var(--shadow);margin-bottom:1rem}
+.eyebrow{color:var(--gold);font-size:.65rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+.hero h2{font-size:clamp(1.5rem,4vw,2.3rem);margin:.5rem 0;line-height:1.05;color:var(--gold-l)}
+.hero p{color:var(--muted);max-width:820px;font-size:.85rem;line-height:1.65}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:1.15rem;margin-bottom:1rem;box-shadow:0 12px 40px rgba(0,0,0,.25);backdrop-filter:blur(10px)}
+.card-title{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin-bottom:.85rem;display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap}
+.card-title h3{font-size:1rem;letter-spacing:0;text-transform:none;color:var(--gold-l)}
+.card-title .hint{text-transform:none;letter-spacing:0;font-weight:400;font-size:.7rem;color:var(--muted-2)}
+.btn{padding:.7rem 1.25rem;background:linear-gradient(135deg,var(--gold),var(--gold-l));color:#1a1008;border:none;border-radius:999px;font-size:.82rem;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:.45rem;box-shadow:0 4px 14px rgba(212,165,116,.20);letter-spacing:.02em}
+.btn:disabled{background:#2a1a10;color:#5a4436;box-shadow:none;opacity:.7;cursor:not-allowed}
+.btn.ghost{background:transparent;border:1px solid var(--line-2);color:var(--gold-l);box-shadow:none}
+.btn.danger{background:transparent;border:1px solid rgba(224,137,120,.32);color:var(--red);box-shadow:none}
+.btn.block{width:100%}
+.btn.sm{padding:.4rem .8rem;font-size:.72rem}
+.icon-btn{width:34px;height:34px;padding:0;border-radius:10px;background:rgba(212,165,116,.06);border:1px solid var(--line);color:var(--muted);display:inline-flex;align-items:center;justify-content:center}
+.icon-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn:hover{color:var(--gold-l);border-color:var(--line-2);background:rgba(212,165,116,.12)}
+.icon-btn:disabled{opacity:.35;cursor:not-allowed}
+.icon-btn.danger:hover{color:var(--red);border-color:rgba(224,137,120,.4)}
+input,textarea,select{width:100%;padding:.75rem .9rem;border-radius:11px;border:1px solid var(--line);background:rgba(14,8,5,.72);color:var(--text);font-size:.86rem}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,165,116,.14);background:rgba(14,8,5,.9)}
+textarea{resize:vertical;min-height:120px;line-height:1.6;font-family:inherit}
+label{display:block;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:.4rem}
+select option{background:#2a1a10;color:var(--text)}
+.field{min-width:0}
+.row{display:flex;gap:.75rem;flex-wrap:wrap}
+.row>*{flex:1;min-width:170px}
+.grid{display:grid;gap:.85rem}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.hint{font-size:.72rem;color:var(--muted);line-height:1.55}
+.note{background:rgba(212,165,116,.05);border-left:3px solid var(--gold);border-top:1px solid rgba(212,165,116,.12);border-right:1px solid rgba(212,165,116,.12);border-bottom:1px solid rgba(212,165,116,.12);border-radius:10px;padding:.7rem .9rem;font-size:.74rem;color:#d8c0a0;line-height:1.55;margin-bottom:1rem}
+.note.warn{background:rgba(232,184,74,.05);border-left-color:var(--warn);color:#e0cf9a}
+.note.ok{background:rgba(127,201,141,.05);border-left-color:var(--green);color:#a7e8c0}
+.empty{text-align:center;padding:2.5rem 1rem;color:var(--muted);font-size:.82rem}
+.empty .ico{font-size:2.5rem;display:block;margin-bottom:.6rem;opacity:.4}
+.hidden{display:none!important}
+.chip{display:inline-flex;align-items:center;gap:.35rem;padding:3px 10px;background:rgba(212,165,116,.08);border:1px solid var(--line);border-radius:999px;font-size:.68rem;color:var(--muted);font-weight:600}
+.chip.ok{border-color:rgba(127,201,141,.35);color:var(--green);background:rgba(127,201,141,.08)}
+.chip.warn{border-color:rgba(232,184,74,.35);color:var(--warn);background:rgba(232,184,74,.08)}
+.chip.err{border-color:rgba(224,137,120,.35);color:var(--red);background:rgba(224,137,120,.08)}
+.chip.info{border-color:var(--line-2);color:var(--gold-l)}
+.welcome{padding:1.5rem 0}
+.welcome h1{font-size:clamp(1.6rem,5vw,2.6rem);color:var(--gold-l);font-family:Georgia,serif;font-weight:700;letter-spacing:-.02em;line-height:1.05;margin-bottom:.75rem}
+.welcome p{color:var(--muted);font-size:.9rem;line-height:1.7;max-width:720px;margin-bottom:1.5rem}
+.choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1rem}
+.choice-card{background:linear-gradient(135deg,rgba(212,165,116,.10),rgba(166,124,82,.02));border:1px solid var(--line);border-radius:20px;padding:1.5rem;cursor:pointer;transition:.2s;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:.85rem;text-align:left;color:var(--text);font-family:inherit}
+.choice-card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 12px 40px rgba(212,165,116,.15)}
+.choice-card .cc-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--gold-d),var(--gold-l));display:grid;place-items:center;color:#1a1008;box-shadow:0 6px 20px rgba(212,165,116,.35)}
+.choice-card .cc-icon svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.choice-card h3{font-size:1.15rem;color:var(--gold-l);font-family:Georgia,serif}
+.choice-card p{color:var(--muted);font-size:.8rem;line-height:1.55}
+.choice-card .cc-arrow{color:var(--gold);font-weight:800;font-size:.72rem;letter-spacing:.14em;margin-top:auto;display:flex;align-items:center;gap:.4rem}
+.choice-card .cc-arrow svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:640px){.choice-grid{grid-template-columns:1fr}}
+.scene-list{display:flex;flex-direction:column;gap:.7rem}
+.scene-card{background:var(--panel-2);border:1px solid var(--line);border-radius:14px;padding:.9rem 1rem;position:relative;transition:.2s}
+.scene-card.locked{opacity:.45;pointer-events:none}
+.scene-card.locked::after{content:"En attente de la scène précédente";position:absolute;top:.5rem;right:.6rem;font-size:.62rem;color:var(--warn)}
+.scene-card.ready{border-color:rgba(232,184,74,.5);box-shadow:0 0 0 3px rgba(232,184,74,.1)}
+.scene-card.processing{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,165,116,.12)}
+.scene-card.done{border-color:rgba(127,201,141,.4)}
+.scene-card.failed{border-color:rgba(224,137,120,.4)}
+.scene-card .head{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap}
+.scene-card .num{background:linear-gradient(135deg,var(--gold-d),var(--gold-l));color:#1a1008;font-weight:800;font-size:.68rem;padding:3px 10px;border-radius:999px;letter-spacing:.04em}
+.scene-card .time{font-size:.7rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.scene-card .badge{font-size:.65rem;padding:2px 9px;border-radius:999px;background:var(--panel-3);color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:1px solid var(--line)}
+.scene-card .badge.warn{background:rgba(232,184,74,.12);color:var(--warn);border-color:rgba(232,184,74,.3)}
+.scene-card .badge.ok{background:rgba(127,201,141,.12);color:var(--green);border-color:rgba(127,201,141,.3)}
+.scene-card .badge.err{background:rgba(224,137,120,.12);color:var(--red);border-color:rgba(224,137,120,.3)}
+.scene-card .badge.dialogue{background:rgba(212,165,116,.12);color:var(--gold-l);border-color:var(--line-2)}
+.scene-card .text{font-size:.85rem;line-height:1.55;padding:.6rem .75rem;background:rgba(14,8,5,.5);border-radius:10px;margin-bottom:.6rem;white-space:pre-wrap;border:1px solid var(--line)}
+.scene-card .actions{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center}
+.scene-card .spacer{flex:1}
+.scene-card .prompt-wrap{display:none;margin-top:.6rem}
+.scene-card .prompt-wrap.visible{display:block}
+.scene-card pre.prompt{font-family:ui-monospace,monospace;font-size:.66rem;line-height:1.5;color:#c4b098;background:rgba(0,0,0,.5);border:1px solid var(--line);border-radius:10px;padding:.75rem;max-height:220px;overflow:auto;white-space:pre-wrap;word-break:break-word}
+.scene-img-zone{margin-top:.65rem;padding:.65rem;border:1px dashed var(--line-2);border-radius:10px;background:rgba(0,0,0,.2);display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
+.scene-img-zone.has-img{border-style:solid;border-color:rgba(127,201,141,.4);background:rgba(127,201,141,.05)}
+.scene-img-zone img{width:64px;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+.scene-img-zone .info{flex:1;min-width:120px;font-size:.72rem;color:var(--muted)}
+.scene-img-zone .info b{color:var(--gold-l);display:block;font-size:.75rem;margin-bottom:2px}
+.scene-img-zone label.btn{cursor:pointer;padding:.45rem .85rem;font-size:.7rem}
+.scene-img-zone input[type=file]{display:none}
+.tabs{display:flex;gap:.4rem;padding:.4rem;background:rgba(14,8,5,.6);border:1px solid var(--line);border-radius:12px;margin-bottom:1rem}
+.tabs button{flex:1;border:0;background:transparent;color:var(--muted);padding:.6rem;border-radius:9px;font-size:.78rem;font-weight:700;letter-spacing:.03em}
+.tabs button.active{background:linear-gradient(135deg,var(--gold-d),var(--gold));color:#1a1008}
+.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.9rem}
+.video-card{background:var(--panel-2);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.video-card video{width:100%;display:block;aspect-ratio:9/16;object-fit:cover;background:#000}
+.video-card .vc-body{padding:.7rem .8rem}
+.video-card .vc-title{font-size:.8rem;font-weight:700;color:var(--gold-l);margin-bottom:.2rem}
+.video-card .vc-meta{font-size:.68rem;color:var(--muted);margin-bottom:.5rem}
+.dash-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.75rem;margin-bottom:.85rem}
+.dash-stat{background:linear-gradient(135deg,rgba(212,165,116,.08),rgba(166,124,82,.02));border:1px solid var(--line);border-radius:14px;padding:.85rem}
+.dash-stat .ds-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted-2);font-weight:700;margin-bottom:.35rem}
+.dash-stat .ds-value{font-size:1.35rem;font-weight:800;color:var(--gold-l);font-variant-numeric:tabular-nums;line-height:1}
+.dash-stat .ds-sub{font-size:.65rem;color:var(--muted);margin-top:.3rem}
+.dash-bar{height:10px;background:rgba(0,0,0,.4);border-radius:999px;overflow:hidden;border:1px solid var(--line);position:relative}
+.dash-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));border-radius:999px;transition:width .4s;width:0%}
+.dash-bar-fill.done{background:linear-gradient(90deg,#5fa86b,#7fc98d)}
+.dash-legend{display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted);margin-top:.5rem;flex-wrap:wrap;gap:.4rem}
+.dash-legend b{color:var(--gold-l);font-variant-numeric:tabular-nums}
+.dash-timer{font-variant-numeric:tabular-nums;font-family:ui-monospace,monospace;color:var(--gold-l);font-weight:700}
+.dash-live{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;color:var(--muted)}
+.dash-live .pulse{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(127,201,141,.6);animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(127,201,141,.6)}70%{box-shadow:0 0 0 10px rgba(127,201,141,0)}100%{box-shadow:0 0 0 0 rgba(127,201,141,0)}}
+.dash-live.idle .pulse{background:var(--muted-2);animation:none}
+@media(max-width:700px){.dash-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.log{background:rgba(0,0,0,.5);border:1px solid var(--line);border-radius:12px;padding:.7rem;font-family:ui-monospace,monospace;font-size:.68rem;color:#9a8570;max-height:220px;overflow-y:auto;line-height:1.55}
+.log .l{padding:1px 0}
+.log .ok{color:var(--green)}.log .err{color:var(--red)}.log .warn{color:var(--warn)}.log .hl{color:var(--gold-l);font-weight:700}
+#toasts{position:fixed;bottom:5.5rem;right:1rem;z-index:1000;display:flex;flex-direction:column;gap:.5rem;max-width:340px}
+.toast{background:linear-gradient(135deg,#3a261a,#2a1a10);border:1px solid var(--line-2);border-left:3px solid var(--gold);border-radius:12px;padding:.75rem 1rem;font-size:.8rem;box-shadow:0 8px 24px rgba(0,0,0,.5);color:var(--text)}
+.toast.success{border-left-color:var(--green)}
+.toast.error{border-left-color:var(--red)}
+.toast.warn{border-left-color:var(--warn)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;align-items:center;justify-content:center;z-index:900;padding:1rem;backdrop-filter:blur(6px)}
+.modal.show{display:flex}
+.modal-box{background:linear-gradient(180deg,#2a1a10,#1a1008);border:1px solid var(--line-2);border-radius:20px;padding:1.5rem;width:100%;max-width:640px;max-height:92vh;overflow-y:auto}
+.modal-box.wide{max-width:860px}
+.modal-box h3{font-size:1rem;margin-bottom:1rem;color:var(--gold-l);font-family:Georgia,serif}
+.modal-actions{display:flex;gap:.5rem;justify-content:flex-end;margin-top:1rem;flex-wrap:wrap}
+.prod-flow{display:flex;flex-direction:column;gap:.4rem}
+.prod-step{display:flex;align-items:center;gap:.75rem;padding:.65rem .8rem;border-radius:11px;border:1px solid var(--line);background:rgba(14,8,5,.4);font-size:.78rem}
+.prod-step .ps-icon{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--panel-3);font-size:.85rem;flex-shrink:0;color:var(--muted)}
+.prod-step.done .ps-icon{background:rgba(127,201,141,.2);color:var(--green)}
+.prod-step.active .ps-icon{background:rgba(232,184,74,.2);color:var(--warn)}
+.prod-step.locked{opacity:.5}
+.prod-step .ps-text{flex:1;min-width:0}
+.prod-step .ps-text b{color:var(--gold-l)}
+.prod-step .ps-text small{display:block;color:var(--muted);font-size:.68rem;margin-top:1px}
+.prod-arrow{text-align:center;color:var(--muted-2);font-size:.85rem;padding:.1rem 0}
+@media(max-width:650px){
+  .app{padding:0 .75rem 110px}
+  .topbar{margin:0 -.75rem 1rem;padding:.75rem}
+  .brand-copy h1{font-size:.85rem}
+  .brand-copy p{display:none}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  .hero{padding:1.15rem}
+  .card{padding:.95rem}
+  .header-actions .status-chip span:not(.dot){display:none}
+  .header-actions .status-chip{padding:6px 8px}
+}
+@media(min-width:900px){
+  .bottom-nav{display:none}
+  .app{padding-bottom:3rem}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="menu-toggle" onclick="toggleDrawer(true)" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="brand">
+      <div class="brand-logo">MB</div>
+      <div class="brand-copy">
+        <h1>MAN BUSINESS STUDIO</h1>
+        <p>CRÉATION VIDÉO IA</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="status-chip" id="api-chip"><span class="dot"></span><span>API</span></span>
+      <button class="icon-btn-header" onclick="go('settings')" title="Paramètres" aria-label="Paramètres">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="app-drawer">
+  <div class="drawer-backdrop" onclick="toggleDrawer(false)"></div>
+  <aside class="drawer-panel">
+    <div class="drawer-head">
+      <strong>MENU</strong>
+      <button class="drawer-close" onclick="toggleDrawer(false)" aria-label="Fermer">✕</button>
+    </div>
+    <div class="drawer-section">Studio</div>
+    <nav class="drawer-nav">
+      <button data-view="home">
+        <svg class="nav-svg" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/><path d="M9.5 20v-5.5h5V20"/></svg>
+        Accueil
+      </button>
+      <button data-view="viral">
+        <svg class="nav-svg" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M7 6V4M17 6V4M7 14h4M7 17h8"/></svg>
+        Vidéo virale
+      </button>
+      <button data-view="avatar">
+        <svg class="nav-svg" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v2"/></svg>
+        Avatar
+      </button>
+      <button data-view="dashboard">
+        <svg class="nav-svg" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>
+        Tableau de bord
+      </button>
+      <button data-view="videos">
+        <svg class="nav-svg" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+        Mes vidéos
+      </button>
+      <button data-view="scripts">
+        <svg class="nav-svg" viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+        Bibliothèque
+      </button>
+    </nav>
+    <div class="drawer-section">Système</div>
+    <nav class="drawer-nav">
+      <button data-view="settings">
+        <svg class="nav-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg>
+        Paramètres
+      </button>
+      <button data-view="create-app">
+        <svg class="nav-svg" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M11 18h2"/></svg>
+        Créer l'application
+      </button>
+    </nav>
+  </aside>
+</div>
+
+<main>
+
+<section class="view active" data-view="home">
+  <div class="welcome">
+    <div class="eyebrow">MAN BUSINESS STUDIO</div>
+    <h1>Bienvenue dans votre studio de création vidéo IA</h1>
+    <p>MAN BUSINESS STUDIO vous permet de créer des vidéos verticales (9:16) scène par scène, avec un contrôle total sur chaque étape de la génération. Chaque scène possède sa propre image de référence, vous validez manuellement avant de passer à la suivante.</p>
+  </div>
+
+  <div class="choice-grid">
+    <button class="choice-card" onclick="go('viral')">
+      <div class="cc-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M7 6V4M17 6V4M7 14h4M7 17h8"/></svg>
+      </div>
+      <h3>Vidéo virale</h3>
+      <p>Créez des vidéos courtes et percutantes. Écrivez votre script, découpez-le en scènes, générez chaque scène manuellement avec sa propre image de référence.</p>
+      <span class="cc-arrow">CRÉER UNE VIDÉO VIRALE <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </button>
+    <button class="choice-card" onclick="go('avatar')">
+      <div class="cc-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v2"/></svg>
+      </div>
+      <h3>Avatar</h3>
+      <p>Créez des vidéos avec un avatar parlant. Profil vocal complet, voix par personnage, images de référence individuelles par scène.</p>
+      <span class="cc-arrow">CRÉER AVEC UN AVATAR <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </button>
+  </div>
+
+  <div class="card" style="margin-top:1.5rem">
+    <div class="card-title"><h3>Comment ça marche</h3></div>
+    <div class="prod-flow">
+      <div class="prod-step"><span class="ps-icon">1</span><div class="ps-text"><b>Écrivez ou collez votre script</b><small>Le script est la source de vérité</small></div></div>
+      <div class="prod-arrow">↓</div>
+      <div class="prod-step"><span class="ps-icon">2</span><div class="ps-text"><b>Choisissez la durée par scène</b><small>4s / 6s (recommandé) / 8s / 10s — avant le découpage</small></div></div>
+      <div class="prod-arrow">↓</div>
+      <div class="prod-step"><span class="ps-icon">3</span><div class="ps-text"><b>Découpez-le en scènes</b><small>Le découpage respecte les phrases et la durée choisie</small></div></div>
+      <div class="prod-arrow">↓</div>
+      <div class="prod-step"><span class="ps-icon">4</span><div class="ps-text"><b>Ajoutez une image pour la scène 1</b><small>Upload ou capture depuis une vidéo précédente</small></div></div>
+      <div class="prod-arrow">↓</div>
+      <div class="prod-step"><span class="ps-icon">5</span><div class="ps-text"><b>Générez la scène 1</b><small>Rien ne se lance automatiquement</small></div></div>
+      <div class="prod-arrow">↓</div>
+      <div class="prod-step"><span class="ps-icon">6</span><div class="ps-text"><b>Capturez la dernière frame de la scène 1</b><small>Elle devient l'image de la scène 2</small></div></div>
+      <div class="prod-arrow">↓</div>
+      <div class="prod-step"><span class="ps-icon">∞</span><div class="ps-text"><b>Répétez scène par scène</b><small>Contrôle total, cohérence garantie</small></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="view" data-view="viral">
+  <div class="hero">
+    <div class="eyebrow">ÉTAPE 1 · SCRIPT</div>
+    <h2>Vidéo virale</h2>
+    <p>Écrivez ou collez votre script. Choisissez la durée par scène avant de découper. Vous pouvez aussi charger un script depuis la bibliothèque partagée.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h3>Script</h3>
+      <span class="hint" id="viral-script-stats"></span>
+    </div>
+    <div class="row" style="margin-bottom:.75rem">
+      <input type="text" id="viral-title" placeholder="Titre de la vidéo" style="flex:2">
+      <button class="btn ghost" onclick="openScriptLibrary()">Charger un script</button>
+      <button class="btn ghost" onclick="saveViralScriptToLibrary()">Sauvegarder</button>
+    </div>
+    <textarea id="viral-script" placeholder="Écrivez ou collez ici votre script complet. Un paragraphe par idée, une phrase par scène idéalement."></textarea>
+    <div class="row" style="margin-top:.75rem">
+      <div class="field">
+        <label>Durée par scène (avant découpage)</label>
+        <select id="viral-scene-duration">
+          <option value="4">4 secondes</option>
+          <option value="6" selected>6 secondes — recommandé</option>
+          <option value="8">8 secondes</option>
+          <option value="10">10 secondes</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <button class="btn block" onclick="analyzeViralScript()">Découper en scènes</button>
+      </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <button class="btn ghost block" onclick="detectViralCharacters()">Détecter les personnages</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card hidden" id="viral-characters-card">
+    <div class="card-title">
+      <h3>Personnages détectés</h3>
+      <span class="hint">Choisissez le personnage principal (injecté dans chaque prompt)</span>
+    </div>
+    <div id="viral-characters-list"></div>
+    <div class="actions">
+      <button class="btn ghost" onclick="addManualCharacter('viral')">Ajouter manuellement</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h3>Tableau de bord</h3>
+      <span class="hint" id="viral-dash-live"></span>
+    </div>
+    <div id="viral-dashboard"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h3>Chaîne de production</h3>
+      <span class="hint" id="viral-progress-hint">—</span>
+    </div>
+    <div id="viral-flow" class="prod-flow"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h3>Scènes</h3>
+      <span class="hint" id="viral-scenes-hint">0 scène</span>
+    </div>
+    <div id="viral-scenes" class="scene-list"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><h3>Journal</h3></div>
+    <div class="log" id="log-viral"></div>
+  </div>
+</section>
+
+<section class="view" data-view="avatar">
+  <div class="hero">
+    <div class="eyebrow">ÉTAPE 1 · SCRIPT</div>
+    <h2>Avatar</h2>
+    <p>Créez une vidéo avec un avatar parlant. Le script, le profil vocal, les scènes et les images de référence sont indépendants de la section Vidéo virale.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h3>Script</h3>
+      <span class="hint" id="avatar-script-stats"></span>
+    </div>
+    <div class="row" style="margin-bottom:.75rem">
+      <input type="text" id="avatar-title" placeholder="Titre de la vidéo">
+      <button class="btn ghost" onclick="openScriptLibrary()">Charger un script</button>
+      <button class="btn ghost" onclick="saveAvatarScriptToLibrary()">Sauvegarder</button>
+    </div>
+    <textarea id="avatar-script" placeholder="Script que l'avatar va prononcer. Formatez les dialogues : Marie : Bonjour tout le monde."></textarea>
+    <div class="row" style="margin-top:.75rem">
+      <div class="field">
+        <label>Durée par scène (avant découpage)</label>
+        <select id="avatar-scene-duration">
+          <option value="4">4 secondes</option>
+          <option value="6" selected>6 secondes — recommandé</option>
+          <option value="8">8 secondes</option>
+          <option value="10">10 secondes</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <button class="btn block" onclick="analyzeAvatarScript()">Découper en scènes</button>
+      </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <button class="btn ghost block" onclick="detectAvatarCharacters()">Détecter les dialogues</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card hidden" id="avatar-characters-card">
+    <div class="card-title">
+      <h3>Personnages</h3>
+      <span class="hint">Voix et identité par personnage</span>
+    </div>
+    <div id="avatar-characters-list"></div>
+    <div class="actions">
+      <button class="btn ghost" onclick="addManualCharacter('avatar')">Ajouter manuellement</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h3>Profil vocal global</h3>
+      <span class="hint">Appliqué par défaut à toutes les scènes</span>
+    </div>
+    <div class="grid grid-3">
+      <div class="field"><label>Présence</label>
+        <select id="voice-enabled">
+          <option value="true" selected>Activée</option>
+          <option value="false">Silencieuse</option>
+        </select>
+      </div>
+      <div class="field"><label>Genre</label>
+        <select id="voice-gender">
+          <option value="female" selected>Femme</option>
+          <option value="male">Homme</option>
+          <option value="child">Enfant</option>
+          <option value="neutral">Neutre</option>
+        </select>
+      </div>
+      <div class="field"><label>Âge vocal</label>
+        <select id="voice-age">
+          <option value="child">Enfant</option>
+          <option value="young-adult" selected>Jeune adulte</option>
+          <option value="adult">Adulte</option>
+          <option value="senior">Senior</option>
+        </select>
+      </div>
+      <div class="field"><label>Timbre</label>
+        <select id="voice-timbre">
+          <option value="clear">Clair</option>
+          <option value="warm" selected>Chaleureux</option>
+          <option value="deep">Grave</option>
+          <option value="soft">Doux</option>
+          <option value="powerful">Puissant</option>
+          <option value="husky">Rauque</option>
+        </select>
+      </div>
+      <div class="field"><label>Débit</label>
+        <select id="voice-pace">
+          <option value="slow">Lent</option>
+          <option value="normal" selected>Normal</option>
+          <option value="fast">Rapide</option>
+        </select>
+      </div>
+      <div class="field"><label>Ton</label>
+        <select id="voice-tone">
+          <option value="neutral">Neutre</option>
+          <option value="warm" selected>Chaleureux</option>
+          <option value="friendly">Amical</option>
+          <option value="authoritative">Autoritaire</option>
+          <option value="serious">Sérieux</option>
+          <option value="dynamic">Dynamique</option>
+        </select>
+      </div>
+      <div class="field"><label>Accent</label>
+        <select id="voice-accent">
+          <option value="french-neutral" selected>Français neutre</option>
+          <option value="french-parisian">Parisien</option>
+          <option value="quebecois">Québécois</option>
+          <option value="african-french">Africain fr.</option>
+          <option value="international">International</option>
+        </select>
+      </div>
+    </div>
+    <div class="field" style="margin-top:.75rem">
+      <label>Description libre de la voix</label>
+      <textarea id="voice-description" style="min-height:70px" placeholder="Ex : voix féminine posée, articulation claire…"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h3>Tableau de bord</h3>
+      <span class="hint" id="avatar-dash-live"></span>
+    </div>
+    <div id="avatar-dashboard"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h3>Chaîne de production</h3>
+      <span class="hint" id="avatar-progress-hint">—</span>
+    </div>
+    <div id="avatar-flow" class="prod-flow"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h3>Scènes</h3>
+      <span class="hint" id="avatar-scenes-hint">0 scène</span>
+    </div>
+    <div id="avatar-scenes" class="scene-list"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><h3>Journal</h3></div>
+    <div class="log" id="log-avatar"></div>
+  </div>
+</section>
+
+<section class="view" data-view="dashboard">
+  <div class="hero">
+    <div class="eyebrow">STATISTIQUES</div>
+    <h2>Tableau de bord global</h2>
+    <p>Vue cumulée de la Vidéo virale et de l'Avatar : progression, temps, scènes générées et total de vidéos produites dans l'application.</p>
+  </div>
+
+  <div class="tabs">
+    <button data-dtab="global" class="active" onclick="switchDashTab('global')">Global</button>
+    <button data-dtab="viral" onclick="switchDashTab('viral')">Vidéo virale</button>
+    <button data-dtab="avatar" onclick="switchDashTab('avatar')">Avatar</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h3 id="dash-title">Tableau de bord global</h3>
+      <span class="hint" id="dash-live"></span>
+    </div>
+    <div id="dash-content"></div>
+  </div>
+</section>
+
+<section class="view" data-view="videos">
+  <div class="hero">
+    <div class="eyebrow">ARCHIVE</div>
+    <h2>Mes vidéos</h2>
+    <p>Chaque scène générée se range automatiquement dans la bonne catégorie : Avatar ou Vidéo virale.</p>
+  </div>
+
+  <div class="tabs">
+    <button data-vtab="viral" class="active" onclick="switchVideoTab('viral')">Vidéo virale</button>
+    <button data-vtab="avatar" onclick="switchVideoTab('avatar')">Avatar</button>
+  </div>
+
+  <div id="videos-viral" class="video-grid"></div>
+  <div id="videos-avatar" class="video-grid hidden"></div>
+</section>
+
+<section class="view" data-view="scripts">
+  <div class="hero">
+    <div class="eyebrow">BIBLIOTHÈQUE</div>
+    <h2>Bibliothèque de scripts</h2>
+    <p>Cette bibliothèque est partagée entre la section Vidéo virale et la section Avatar. Vous pouvez charger un script dans l'une ou l'autre.</p>
+  </div>
+  <div class="card">
+    <div class="card-title"><h3>Scripts sauvegardés</h3><span id="scripts-count">0</span></div>
+    <div id="scripts-list" class="grid grid-2"></div>
+  </div>
+</section>
+
+<section class="view" data-view="settings">
+  <div class="hero">
+    <div class="eyebrow">CONFIGURATION</div>
+    <h2>Paramètres</h2>
+    <p>Clé API Agnes AI, maintenance et gestion des données.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><h3>Clé API</h3></div>
+    <div class="row" style="align-items:flex-end">
+      <div><label for="api-key">Clé API Agnes AI</label>
+        <input type="password" id="api-key" placeholder="sk-…">
+      </div>
+      <div style="flex:0 0 auto"><button class="btn" onclick="saveApiKey()">Sauvegarder</button></div>
+    </div>
+    <div class="row" style="margin-top:.75rem">
+      <button class="btn ghost" onclick="testApiKey()">Tester</button>
+      <button class="btn ghost" onclick="exportAllData()">Exporter les données</button>
+      <button class="btn danger" onclick="resetAllData()">Réinitialiser</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><h3>Stockage local</h3></div>
+    <p class="hint">Toutes les données (scripts, scènes, images, vidéos, clé API) sont stockées uniquement dans votre navigateur. Aucune donnée n'est envoyée à un serveur externe sauf vers Agnes AI au moment de la génération.</p>
+    <div class="note" style="margin-top:.75rem">
+      <b>Images de référence isolées :</b> chaque image appartient à une scène précise. L'IA ne reçoit que l'image de la scène en cours de génération, jamais la banque entière.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><h3>Journal complet</h3></div>
+    <div class="log" id="log-settings"></div>
+  </div>
+</section>
+
+<section class="view" data-view="create-app">
+  <div class="hero">
+    <div class="eyebrow">INSTALLATION</div>
+    <h2>Créer l'application</h2>
+    <p>MAN BUSINESS STUDIO est une Progressive Web App (PWA). Vous pouvez l'installer sur Android ou iPhone, ou la convertir en vraie application (.apk / .ipa).</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><h3>Installation directe (PWA)</h3></div>
+    <div class="note ok" id="pwa-status-note">Vérification de l'état d'installation…</div>
+    <div class="actions">
+      <button class="btn" id="pwa-install-btn" onclick="promptInstallPWA()" style="display:none">Installer l'application</button>
+    </div>
+    <p class="hint" style="margin-top:.75rem">
+      <b>Android + Chrome :</b> menu ⋮ → « Installer l'application ».<br>
+      <b>iPhone + Safari :</b> bouton Partager → « Sur l'écran d'accueil ».
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><h3>Vrai .apk Android / .ipa iOS</h3></div>
+    <div class="note warn">
+      Un fichier HTML seul ne peut pas générer un APK ou un IPA. Il faut passer par un outil de packaging externe.
+    </div>
+    <div class="prod-flow">
+      <div class="prod-step"><span class="ps-icon">1</span><div class="ps-text"><b>Hébergez ce fichier sur HTTPS</b><small>Netlify Drop, Vercel, GitHub Pages, Cloudflare Pages…</small></div></div>
+      <div class="prod-arrow">↓</div>
+      <div class="prod-step"><span class="ps-icon">2</span><div class="ps-text"><b>Allez sur PWABuilder.com</b><small>Outil officiel Microsoft, gratuit</small></div></div>
+      <div class="prod-arrow">↓</div>
+      <div class="prod-step"><span class="ps-icon">3</span><div class="ps-text"><b>Collez votre URL</b><small>PWABuilder analyse votre PWA</small></div></div>
+      <div class="prod-arrow">↓</div>
+      <div class="prod-step"><span class="ps-icon">4</span><div class="ps-text"><b>Générez le package</b><small>APK Android ou projet Xcode iOS</small></div></div>
+      <div class="prod-arrow">↓</div>
+      <div class="prod-step"><span class="ps-icon">✓</span><div class="ps-text"><b>Installez ou publiez</b><small>APK direct sur Android / App Store via compte Apple Developer</small></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><h3>Liens utiles</h3></div>
+    <div class="actions">
+      <a class="btn ghost" href="https://www.pwabuilder.com/" target="_blank" rel="noopener" style="text-decoration:none">Ouvrir PWABuilder</a>
+      <a class="btn ghost" href="https://app.netlify.com/drop" target="_blank" rel="noopener" style="text-decoration:none">Héberger sur Netlify Drop</a>
+    </div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<nav class="bottom-nav">
+  <button data-view="home" class="active">
+    <span class="nav-icon"><svg class="nav-svg" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/><path d="M9.5 20v-5.5h5V20"/></svg></span>
+    <span class="nav-label">Accueil</span>
+  </button>
+  <button data-view="viral">
+    <span class="nav-icon"><svg class="nav-svg" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M7 6V4M17 6V4M7 14h4M7 17h8"/></svg></span>
+    <span class="nav-label">Virale</span>
+  </button>
+  <button data-view="avatar">
+    <span class="nav-icon"><svg class="nav-svg" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v2"/></svg></span>
+    <span class="nav-label">Avatar</span>
+  </button>
+  <button data-view="dashboard">
+    <span class="nav-icon"><svg class="nav-svg" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg></span>
+    <span class="nav-label">Dashboard</span>
+  </button>
+  <button data-view="videos">
+    <span class="nav-icon"><svg class="nav-svg" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>
+    <span class="nav-label">Vidéos</span>
+  </button>
+  <button data-view="scripts">
+    <span class="nav-icon"><svg class="nav-svg" viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>
+    <span class="nav-label">Scripts</span>
+  </button>
+</nav>
+
+<div id="toasts"></div>
+
+<div class="modal" id="modal">
+  <div class="modal-box" id="modal-box">
+    <h3 id="modal-title">Éditer</h3>
+    <div id="modal-body"></div>
+    <div class="modal-actions" id="modal-actions"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   BLOC A — PWA
+   ============================================================ */
+(function(){
+  try{
+    const icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8c896"/><stop offset="1" stop-color="#a67c52"/></linearGradient></defs><rect width="512" height="512" rx="96" fill="#1a1008"/><text x="256" y="360" font-family="Georgia,serif" font-size="220" font-weight="900" text-anchor="middle" fill="url(#g)">MB</text></svg>';
+    const mask = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#1a1008"/><circle cx="256" cy="256" r="180" fill="#d4a574"/><text x="256" y="340" font-family="Georgia,serif" font-size="220" font-weight="900" text-anchor="middle" fill="#1a1008">MB</text></svg>';
+    const iconUri = "data:image/svg+xml,"+encodeURIComponent(icon);
+    const maskUri = "data:image/svg+xml,"+encodeURIComponent(mask);
+    const manifest = {
+      name:"MAN BUSINESS STUDIO",
+      short_name:"MAN BUSINESS",
+      description:"Studio de création vidéo IA — scène par scène",
+      start_url:"./", scope:"./",
+      display:"standalone", orientation:"portrait",
+      background_color:"#1a1008", theme_color:"#1a1008",
+      lang:"fr", dir:"ltr",
+      categories:["business","productivity","video"],
+      icons:[
+        {src:iconUri, sizes:"192x192", type:"image/svg+xml", purpose:"any"},
+        {src:iconUri, sizes:"512x512", type:"image/svg+xml", purpose:"any"},
+        {src:maskUri, sizes:"512x512", type:"image/svg+xml", purpose:"maskable"}
+      ]
+    };
+    const uri = "data:application/manifest+json;charset=utf-8,"+encodeURIComponent(JSON.stringify(manifest));
+    const link = document.getElementById("manifest-link");
+    if(link) link.href = uri;
+    window.__MB_MANIFEST__ = manifest;
+  }catch(e){console.warn(e)}
+})();
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{
+    navigator.serviceWorker.register("sw.js", {scope:"./"}).catch(()=>{});
+  });
+}
+let deferredPrompt = null;
+window.addEventListener("beforeinstallprompt", e=>{
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = document.getElementById("pwa-install-btn");
+  if(btn) btn.style.display = "inline-flex";
+  updatePwaNote("ready");
+});
+window.addEventListener("appinstalled", ()=>{
+  deferredPrompt = null;
+  const btn = document.getElementById("pwa-install-btn");
+  if(btn) btn.style.display = "none";
+  updatePwaNote("installed");
+  toast("Application installée","success");
+});
+function promptInstallPWA(){
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(c=>{
+      deferredPrompt = null;
+      const btn = document.getElementById("pwa-install-btn");
+      if(btn) btn.style.display = "none";
+      toast(c.outcome==="accepted"?"Installation acceptée":"Installation annulée", c.outcome==="accepted"?"success":"warn");
+    });
+  }else{
+    toast("Utilisez le menu ⋮ → Installer l'application","info");
+  }
+}
+function updatePwaNote(state){
+  const note = document.getElementById("pwa-status-note");
+  if(!note) return;
+  if(state==="installed") note.innerHTML = "L'application est installée sur cet appareil.";
+  else if(state==="ready") note.innerHTML = "Cliquez sur le bouton ci-dessous pour installer l'application.";
+  else note.innerHTML = "Pour installer : Android → menu <b>⋮</b> → <b>Installer l'application</b>. iPhone → <b>Safari</b> → <b>Partager</b> → <b>Sur l'écran d'accueil</b>.";
+}
+window.addEventListener("DOMContentLoaded", ()=>{
+  if(window.matchMedia("(display-mode: standalone)").matches) updatePwaNote("installed");
+  else if(deferredPrompt) updatePwaNote("ready");
+  else updatePwaNote("available");
+});
+</script>
+
+<script>
+/* ============================================================
+   BLOC B — HELPERS
+   ============================================================ */
+"use strict";
+var $ = function(id){ return document.getElementById(id); };
+var esc = function(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+}); };
+var uid = function(p){ return (p||"id")+"_"+Date.now().toString(36)+Math.random().toString(36).slice(2,6); };
+var sleep = function(ms){ return new Promise(function(r){ setTimeout(r, ms); }); };
+function toast(msg, type){
+  var el = document.createElement("div");
+  el.className = "toast "+(type||"");
+  el.textContent = msg;
+  $("toasts").appendChild(el);
+  setTimeout(function(){ el.style.opacity="0"; el.style.transition="opacity .3s"; setTimeout(function(){ el.remove(); },300); }, 3200);
+}
+function logTo(id, msg, cls){
+  var el = $(id);
+  if(!el) return;
+  var d = document.createElement("div");
+  d.className = "l "+(cls||"");
+  d.textContent = "["+new Date().toLocaleTimeString()+"] "+msg;
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+}
+function openModal(title, body, actions, opts){
+  opts = opts || {};
+  $("modal-title").textContent = title;
+  $("modal-body").innerHTML = body;
+  $("modal-box").classList.toggle("wide", !!opts.wide);
+  var act = $("modal-actions");
+  act.innerHTML = "";
+  (actions||[]).forEach(function(a){
+    var b = document.createElement("button");
+    b.className = "btn "+(a.cls||"ghost");
+    b.textContent = a.label;
+    b.onclick = function(){ if(a.onClick && a.onClick()===false) return; closeModal(); };
+    act.appendChild(b);
+  });
+  $("modal").classList.add("show");
+}
+function closeModal(){ $("modal").classList.remove("show"); }
+$("modal").addEventListener("click", function(e){ if(e.target.id==="modal") closeModal(); });
+function toggleDrawer(open){ $("app-drawer").classList.toggle("open", open); }
+function fileToDataUri(file){
+  return new Promise(function(res,rej){
+    var r = new FileReader();
+    r.onload = function(e){ res(e.target.result); };
+    r.onerror = function(){ rej(new Error("Lecture impossible")); };
+    r.readAsDataURL(file);
+  });
+}
+function compressImage(dataUri, maxDim, q){
+  maxDim = maxDim || 720; q = q || 0.78;
+  return new Promise(function(res){
+    var img = new Image();
+    img.onload = function(){
+      var w = img.width, h = img.height;
+      if(w>h && w>maxDim){ h = Math.round(h*maxDim/w); w = maxDim; }
+      else if(h>maxDim){ w = Math.round(w*maxDim/h); h = maxDim; }
+      var c = document.createElement("canvas");
+      c.width=w; c.height=h;
+      c.getContext("2d").drawImage(img,0,0,w,h);
+      try{ res(c.toDataURL("image/jpeg", q)); }catch(e){ res(dataUri); }
+    };
+    img.onerror = function(){ res(dataUri); };
+    img.src = dataUri;
+  });
+}
+function debounce(fn, wait){
+  var t;
+  return function(){
+    var args = arguments, ctx = this;
+    clearTimeout(t);
+    t = setTimeout(function(){ fn.apply(ctx, args); }, wait);
+  };
+}
+function formatHMS(ms){
+  var s = Math.max(0, Math.floor(ms/1000));
+  var h = Math.floor(s/3600);
+  var m = Math.floor((s%3600)/60);
+  var ss = s%60;
+  if(h>0) return h+"h "+String(m).padStart(2,"0")+"m "+String(ss).padStart(2,"0")+"s";
+  if(m>0) return m+"m "+String(ss).padStart(2,"0")+"s";
+  return ss+"s";
+}
+</script>
+
+<script>
+/* ============================================================
+   BLOC C — STOCKAGE & ÉTAT
+   ============================================================ */
+var LS_KEYS = {
+  viral:   "mb_viral_state",
+  avatar:  "mb_avatar_state",
+  videos:  "mb_videos",
+  scripts: "mb_scripts",
+  voice:   "mb_voice",
+  apiKey:  "mb_api_key",
+  lastReq: "mb_last_video_request"
+};
+
+var DEFAULT_VOICE = {
+  enabled: true, gender:"female", age:"young-adult", timbre:"warm",
+  pace:"normal", tone:"warm", accent:"french-neutral", description:""
+};
+
+function getJSON(k, f){ try { return JSON.parse(localStorage.getItem(k)) || f; } catch(e){ return f; } }
+function setJSON(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
+function freshSessionState(){
+  return {
+    title:"", script:"", characters:[], mainCharacterId:null, scenes:[],
+    sceneDuration: 6,
+    runningStartedAt: null,
+    lastRunDurationMs: 0
+  };
+}
+
+var state = {
+  view: "home",
+  viral:  getJSON(LS_KEYS.viral, freshSessionState()),
+  avatar: getJSON(LS_KEYS.avatar, freshSessionState()),
+  videos: getJSON(LS_KEYS.videos, []),
+  scripts: getJSON(LS_KEYS.scripts, []),
+  voice:  getJSON(LS_KEYS.voice, DEFAULT_VOICE),
+  running: false,
+  runningSection: null,
+  runningSceneId: null,
+  stopRequested: false,
+  lastVideoRequestAt: Number(localStorage.getItem(LS_KEYS.lastReq)||0),
+  activeTab: "viral",
+  dashTab: "global",
+  selectedDuration: { viral: 6, avatar: 6 }
+};
+
+/* Migration douce */
+[state.viral, state.avatar].forEach(function(s){
+  if(typeof s.sceneDuration !== "number") s.sceneDuration = 6;
+  if(typeof s.runningStartedAt === "undefined") s.runningStartedAt = null;
+  if(typeof s.lastRunDurationMs !== "number") s.lastRunDurationMs = 0;
+});
+
+function saveViral(){ setJSON(LS_KEYS.viral, state.viral); }
+function saveAvatar(){ setJSON(LS_KEYS.avatar, state.avatar); }
+function saveVideos(){ setJSON(LS_KEYS.videos, state.videos); }
+function saveScripts(){ setJSON(LS_KEYS.scripts, state.scripts); }
+function saveVoice(){ setJSON(LS_KEYS.voice, state.voice); }
+
+function getSection(section){ return section === "viral" ? state.viral : state.avatar; }
+function saveSection(section){ if(section === "viral") saveViral(); else saveAvatar(); }
+function renderSection(section){ if(section === "viral") renderViral(); else renderAvatar(); }
+</script>
+
+<script>
+/* ============================================================
+   BLOC D — NAVIGATION (fix scroll-up)
+   ============================================================ */
+function go(view){
+  state.view = view;
+  document.querySelectorAll("section.view").forEach(function(v){ v.classList.toggle("active", v.dataset.view===view); });
+  document.querySelectorAll("button[data-view]").forEach(function(b){
+    b.classList.toggle("active", b.dataset.view===view);
+  });
+  toggleDrawer(false);
+  window.scrollTo({top:0,behavior:"smooth"});
+  if(view==="videos") renderVideos();
+  if(view==="scripts") renderScripts();
+  if(view==="viral") renderViral();
+  if(view==="avatar") renderAvatar();
+  if(view==="dashboard") renderDashboard();
+  updateApiChip();
+}
+document.querySelectorAll("button[data-view]").forEach(function(b){
+  b.addEventListener("click", function(e){
+    e.stopPropagation();
+    go(b.dataset.view);
+  });
+});
+</script>
+
+<script>
+/* ============================================================
+   BLOC E — API AGNES + QUOTA
+   ============================================================ */
+var BASE_URL = "https://apihub.agnes-ai.com/v1";
+var RAW_URL  = "https://apihub.agnes-ai.com";
+var MODEL_VIDEO = "agnes-video-v2.0";
+var FRAME_RATE = 24;
+var INTER_VIDEO_DELAY_MS = 60000;
+var FIRST_POLL_DELAY_MS = 45000;
+var POLL_INTERVAL_MS = 10000;
+var MAX_POLL_ATTEMPTS = 60;
+var MAX_FRAMES = 441;
+var MIN_FRAMES = 25;
+
+function getApiKey(){ return (localStorage.getItem(LS_KEYS.apiKey)||"").trim(); }
+function apiHeaders(){
+  var k = getApiKey();
+  if(!k) throw new Error("Clé API manquante");
+  return { "Authorization":"Bearer "+k, "Content-Type":"application/json" };
+}
+function saveApiKey(){
+  var v = $("api-key").value.trim();
+  if(!v){ toast("Clé vide","error"); return; }
+  localStorage.setItem(LS_KEYS.apiKey, v);
+  updateApiChip();
+  toast("Clé API sauvegardée","success");
+  logTo("log-settings","Clé API sauvegardée","ok");
+}
+function updateApiChip(){
+  var c = $("api-chip");
+  if(!c) return;
+  if(getApiKey()){ c.className="status-chip ok"; c.innerHTML='<span class="dot"></span><span>API OK</span>'; }
+  else{ c.className="status-chip err"; c.innerHTML='<span class="dot"></span><span>API absente</span>'; }
+}
+async function testApiKey(){
+  if(!getApiKey()){ toast("Clé manquante","error"); return; }
+  try{
+    var r = await fetch(BASE_URL+"/models", {headers: apiHeaders()});
+    if(r.status === 401 || r.status === 403){
+      toast("Clé API refusée (HTTP "+r.status+")","error");
+      logTo("log-settings","Test API : refusé "+r.status,"err");
+      return;
+    }
+    toast("Test API : HTTP "+r.status, r.ok?"success":"warn");
+    logTo("log-settings","Test API : HTTP "+r.status, r.ok?"ok":"warn");
+  }catch(e){
+    toast("Erreur réseau : "+e.message,"error");
+    logTo("log-settings","Test API : "+e.message,"err");
+  }
+}
+function remainingCooldown(){
+  var last = Math.max(state.lastVideoRequestAt, Number(localStorage.getItem(LS_KEYS.lastReq)||0));
+  return Math.max(0, Math.ceil((last + INTER_VIDEO_DELAY_MS - Date.now())/1000));
+}
+async function apiFetch(url, options){
+  var rate = 0, net = 0;
+  while(true){
+    var r;
+    try { r = await fetch(url, options); }
+    catch(e){
+      if(net >= 5) throw e;
+      await sleep([5000,10000,15000,30000,60000][net++]);
+      continue;
+    }
+    if(r.status !== 429) return r;
+    if(rate >= 6) return r;
+    await sleep([5000,10000,15000,20000,30000,45000,60000][rate++]);
+  }
+}
+async function pollVideo(videoId, onProgress){
+  await sleep(FIRST_POLL_DELAY_MS);
+  for(var attempt = 0; attempt < MAX_POLL_ATTEMPTS; attempt++){
+    if(state.stopRequested) throw new Error("Génération arrêtée par l'utilisateur");
+    if(attempt > 0) await sleep(POLL_INTERVAL_MS);
+    var r;
+    try{
+      var url = RAW_URL+"/agnesapi?video_id="+encodeURIComponent(videoId)+"&model_name="+encodeURIComponent(MODEL_VIDEO);
+      r = await apiFetch(url, {method:"GET",headers: apiHeaders()});
+    }catch(netErr){
+      if(onProgress) onProgress(null, "réseau");
+      continue;
+    }
+    if(!r.ok){
+      if(r.status === 401 || r.status === 403){
+        throw new Error("Accès refusé (HTTP "+r.status+") — vérifiez la clé API");
+      }
+      if(r.status >= 500){
+        if(onProgress) onProgress(null, "serveur "+r.status);
+        continue;
+      }
+      var txt = "";
+      try { txt = await r.text(); } catch(e){}
+      throw new Error("HTTP "+r.status+" — "+String(txt).slice(0,120));
+    }
+    var d;
+    try { d = await r.json(); }
+    catch(jsonErr){
+      if(onProgress) onProgress(null, "réponse");
+      continue;
+    }
+    var status = d.status || "unknown";
+    var progress = Number(d.progress == null ? 0 : d.progress);
+    if(onProgress) onProgress(progress, status);
+    if(status === "completed" || status === "succeeded"){
+      var url2 = (d.metadata && d.metadata.url) || d.url || (d.output && d.output.url);
+      if(!url2) throw new Error("Terminé sans URL");
+      return url2;
+    }
+    if(status === "failed" || status === "error") throw new Error("Génération échouée côté API");
+  }
+  throw new Error("Délai de polling dépassé");
+}
+</script>
+
+<script>
+/* ============================================================
+   BLOC F — DÉCOUPAGE SCRIPT
+   ============================================================ */
+var WORDS_PER_SEC = 2.5;
+var MIN_SCENE_SEC = 1.0;
+
+function wordCount(t){ return (t||"").trim().split(/\s+/).filter(Boolean).length; }
+function estimateSec(t){ return wordCount(t) / WORDS_PER_SEC; }
+function framesForSec(sec){
+  var target = Math.round(sec * FRAME_RATE);
+  target = Math.max(MIN_FRAMES, Math.min(MAX_FRAMES, target));
+  var n = Math.round((target - 1) / 8);
+  n = Math.max(3, Math.min(55, n));
+  return n * 8 + 1;
+}
+function framesToSec(f){ return f / FRAME_RATE; }
+
+function splitSentences(text){
+  var m = text.match(/[^.!?…]+[.!?…]+|[^.!?…]+$/g);
+  return (m||[]).map(function(s){ return s.trim(); }).filter(Boolean);
+}
+function splitLongSentence(sentence, maxSec){
+  if(estimateSec(sentence) <= maxSec) return [sentence];
+  var raw = sentence.split(/([,;:—–])\s+/);
+  var parts = [];
+  for(var i = 0; i < raw.length; i++){
+    if(i % 2 === 0){ if(raw[i]) parts.push(raw[i]); }
+    else if(parts.length){ parts[parts.length-1] += raw[i]; }
+  }
+  if(parts.length > 1){
+    var out = []; var buf = "";
+    for(var j = 0; j < parts.length; j++){
+      var p = parts[j];
+      var c = buf ? buf+" "+p : p;
+      if(buf && estimateSec(c) > maxSec){ out.push(buf); buf = p; }
+      else buf = c;
+    }
+    if(buf) out.push(buf);
+    return out;
+  }
+  var words = sentence.split(/\s+/);
+  var maxWords = Math.max(3, Math.floor(maxSec * WORDS_PER_SEC));
+  var chunks = [];
+  for(var k = 0; k < words.length; k += maxWords) chunks.push(words.slice(k, k+maxWords).join(" "));
+  return chunks;
+}
+
+function analyzeScriptToScenes(script, maxSec){
+  maxSec = Math.max(MIN_SCENE_SEC, Number(maxSec) || 6);
+  var cleaned = (script||"").replace(/\r/g,"").replace(/[ \t]+/g," ").trim();
+  if(!cleaned) return [];
+
+  var sentences = splitSentences(cleaned);
+  var segments = [];
+  for(var i = 0; i < sentences.length; i++){
+    var subs = splitLongSentence(sentences[i], maxSec);
+    for(var j = 0; j < subs.length; j++){
+      var t = subs[j].trim();
+      if(t) segments.push(t);
+    }
+  }
+  if(segments.length === 0) return [];
+
+  /* Étape 1 : fusion des segments trop courts */
+  var normalized = [];
+  for(var a = 0; a < segments.length; a++){
+    var seg = segments[a];
+    var dur = estimateSec(seg);
+    if(dur < MIN_SCENE_SEC && a < segments.length - 1){
+      segments[a+1] = seg + " " + segments[a+1];
+      continue;
+    }
+    if(dur < MIN_SCENE_SEC && normalized.length > 0){
+      normalized[normalized.length-1] += " " + seg;
+      continue;
+    }
+    normalized.push(seg);
+  }
+
+  /* Étape 2 : regroupement tant que <= maxSec */
+  var merged = [];
+  var buf2 = "";
+  for(var b = 0; b < normalized.length; b++){
+    var s2 = normalized[b];
+    var c2 = buf2 ? buf2 + " " + s2 : s2;
+    if(buf2 && estimateSec(c2) > maxSec){
+      merged.push(buf2);
+      buf2 = s2;
+    }else{
+      buf2 = c2;
+    }
+  }
+  if(buf2) merged.push(buf2);
+
+  /* Étape 3 : sécurité dernier segment trop court */
+  if(merged.length > 1 && estimateSec(merged[merged.length-1]) < MIN_SCENE_SEC){
+    var last = merged.pop();
+    merged[merged.length-1] += " " + last;
+  }
+  return merged;
+}
+
+function detectSpeaker(text){
+  if(!text) return null;
+  var m = text.match(/^\s*([A-ZÀ-ÖØ-Þ][A-Za-zÀ-ÖØ-öø-ÿ-]{1,30})\s*:/);
+  return m ? m[1].trim() : null;
+}
+function makeScene(text){
+  var sec = Math.min(estimateSec(text), 12);
+  var frames = framesForSec(sec || 3);
+  return {
+    id: uid("sc"),
+    text: text || "",
+    speaker: detectSpeaker(text) || null,
+    numFrames: frames,
+    durationSec: framesToSec(frames),
+    startSec: 0, endSec: 0,
+    prompt: "",
+    imageDataUri: null,
+    status: "waiting_image",
+    videoUrl: null,
+    videoId: null,
+    progress: null,
+    error: null
+  };
+}
+function recalcTimings(scenes){
+  var cursor = 0;
+  scenes.forEach(function(sc){
+    sc.startSec = cursor;
+    sc.endSec = cursor + sc.durationSec;
+    cursor = sc.endSec;
+  });
+}
+</script>
+
+<script>
+/* ============================================================
+   BLOC G — PERSONNAGES
+   ============================================================ */
+function extractCharactersFromScript(text){
+  var found = {};
+  var re = /(^|\n|[.!?…]\s+)([A-ZÀ-ÖØ-Þ][A-Za-zÀ-ÖØ-öø-ÿ-]{1,30}(?:\s+[A-ZÀ-ÖØ-Þ][A-Za-zÀ-ÖØ-öø-ÿ-]{1,30})?)\s*:\s*([^\n]+)/g;
+  var m;
+  while((m = re.exec(text)) !== null){
+    var name = m[2].trim();
+    if(/^(note|remarque|exemple|intro|outro|scene|scène|voix off|narrateur|narration)$/i.test(name)) continue;
+    var txt = m[3].trim().replace(/^["«]|["»]$/g,"");
+    found[name] = found[name] || [];
+    if(txt && found[name].length < 4) found[name].push(txt.slice(0,120));
+  }
+  return found;
+}
+function buildCharacterObjects(found, existing){
+  var existingMap = {};
+  (existing||[]).forEach(function(c){ existingMap[c.name.toLowerCase()] = c; });
+  return Object.keys(found).map(function(name){
+    var key = name.toLowerCase();
+    if(existingMap[key]){
+      existingMap[key].examples = found[name];
+      return existingMap[key];
+    }
+    return { id: uid("ch"), name: name, description:"", examples: found[name] };
+  });
+}
+function detectViralCharacters(){
+  state.viral.script = $("viral-script").value;
+  var found = extractCharactersFromScript(state.viral.script);
+  if(Object.keys(found).length === 0){
+    toast("Aucun personnage détecté. Format attendu : Nom : texte","warn");
+    return;
+  }
+  state.viral.characters = buildCharacterObjects(found, state.viral.characters);
+  if(!state.viral.mainCharacterId) state.viral.mainCharacterId = state.viral.characters[0].id;
+  saveViral();
+  renderViralCharacters();
+  toast(state.viral.characters.length+" personnage(s) détecté(s)","success");
+}
+function detectAvatarCharacters(){
+  state.avatar.script = $("avatar-script").value;
+  var found = extractCharactersFromScript(state.avatar.script);
+  if(Object.keys(found).length === 0){
+    toast("Aucun dialogue détecté. Format : Nom : texte","warn");
+    return;
+  }
+  state.avatar.characters = buildCharacterObjects(found, state.avatar.characters);
+  if(!state.avatar.mainCharacterId) state.avatar.mainCharacterId = state.avatar.characters[0].id;
+  saveAvatar();
+  renderAvatarCharacters();
+  toast(state.avatar.characters.length+" personnage(s) détecté(s)","success");
+}
+function renderViralCharacters(){
+  var card = $("viral-characters-card");
+  var list = $("viral-characters-list");
+  if(state.viral.characters.length === 0){ card.classList.add("hidden"); return; }
+  card.classList.remove("hidden");
+  list.innerHTML = state.viral.characters.map(function(c){
+    var isMain = c.id === state.viral.mainCharacterId;
+    return '<div class="row" style="align-items:center;padding:.6rem;border:1px solid var(--line);border-radius:10px;margin-bottom:.5rem;background:rgba(0,0,0,.15)">' +
+      '<input type="text" value="'+esc(c.name)+'" onchange="updateCharName(\'viral\',\''+c.id+'\',this.value)" style="flex:1">' +
+      '<input type="text" value="'+esc(c.description||'')+'" placeholder="Description" onchange="updateCharDesc(\'viral\',\''+c.id+'\',this.value)" style="flex:2">' +
+      '<button class="btn '+(isMain?'':'ghost')+' sm" onclick="setMainCharacter(\'viral\',\''+c.id+'\')">'+(isMain?'Principal':'Définir principal')+'</button>' +
+      '<button class="icon-btn danger" onclick="removeChar(\'viral\',\''+c.id+'\')" title="Supprimer">✕</button>' +
+      '</div>';
+  }).join("");
+}
+function renderAvatarCharacters(){
+  var card = $("avatar-characters-card");
+  var list = $("avatar-characters-list");
+  if(state.avatar.characters.length === 0){ card.classList.add("hidden"); return; }
+  card.classList.remove("hidden");
+  list.innerHTML = state.avatar.characters.map(function(c){
+    var isMain = c.id === state.avatar.mainCharacterId;
+    return '<div class="row" style="align-items:center;padding:.6rem;border:1px solid var(--line);border-radius:10px;margin-bottom:.5rem;background:rgba(0,0,0,.15)">' +
+      '<input type="text" value="'+esc(c.name)+'" onchange="updateCharName(\'avatar\',\''+c.id+'\',this.value)" style="flex:1">' +
+      '<input type="text" value="'+esc(c.description||'')+'" placeholder="Description" onchange="updateCharDesc(\'avatar\',\''+c.id+'\',this.value)" style="flex:2">' +
+      '<button class="btn '+(isMain?'':'ghost')+' sm" onclick="setMainCharacter(\'avatar\',\''+c.id+'\')">'+(isMain?'Principal':'Définir principal')+'</button>' +
+      '<button class="icon-btn danger" onclick="removeChar(\'avatar\',\''+c.id+'\')" title="Supprimer">✕</button>' +
+      '</div>';
+  }).join("");
+}
+function updateCharName(sec, id, val){
+  var arr = sec==="viral" ? state.viral.characters : state.avatar.characters;
+  var c = arr.find(function(x){ return x.id===id; });
+  if(!c) return;
+  c.name = val.trim() || c.name;
+  if(sec==="viral"){ saveViral(); renderViralCharacters(); }
+  else { saveAvatar(); renderAvatarCharacters(); }
+}
+function updateCharDesc(sec, id, val){
+  var arr = sec==="viral" ? state.viral.characters : state.avatar.characters;
+  var c = arr.find(function(x){ return x.id===id; });
+  if(!c) return;
+  c.description = val.trim();
+  if(sec==="viral") saveViral(); else saveAvatar();
+}
+function setMainCharacter(sec, id){
+  if(sec==="viral"){ state.viral.mainCharacterId = id; saveViral(); renderViralCharacters(); }
+  else { state.avatar.mainCharacterId = id; saveAvatar(); renderAvatarCharacters(); }
+  toast("Personnage principal défini","success");
+}
+function removeChar(sec, id){
+  if(!confirm("Supprimer ce personnage ?")) return;
+  if(sec==="viral"){
+    state.viral.characters = state.viral.characters.filter(function(c){ return c.id!==id; });
+    if(state.viral.mainCharacterId === id) state.viral.mainCharacterId = state.viral.characters[0] ? state.viral.characters[0].id : null;
+    saveViral(); renderViralCharacters();
+  }else{
+    state.avatar.characters = state.avatar.characters.filter(function(c){ return c.id!==id; });
+    if(state.avatar.mainCharacterId === id) state.avatar.mainCharacterId = state.avatar.characters[0] ? state.avatar.characters[0].id : null;
+    saveAvatar(); renderAvatarCharacters();
+  }
+}
+function addManualCharacter(sec){
+  openModal("Nouveau personnage",
+    '<label>Nom</label><input id="new-char-name" placeholder="Ex : Marie">',
+    [
+      {label:"Annuler", cls:"ghost"},
+      {label:"Ajouter", cls:"", onClick:function(){
+        var name = $("new-char-name").value.trim();
+        if(!name){ toast("Nom vide","warn"); return false; }
+        var c = {id: uid("ch"), name: name, description:"", examples:[]};
+        if(sec==="viral"){ state.viral.characters.push(c); if(!state.viral.mainCharacterId) state.viral.mainCharacterId = c.id; saveViral(); renderViralCharacters(); }
+        else{ state.avatar.characters.push(c); if(!state.avatar.mainCharacterId) state.avatar.mainCharacterId = c.id; saveAvatar(); renderAvatarCharacters(); }
+      }}
+    ]
+  );
+}
+</script>
+
+<script>
+/* ============================================================
+   BLOC H — PROMPT BUILDER (format 9:16)
+   ============================================================ */
+function getMainCharacter(section){
+  var s = getSection(section);
+  if(!s.mainCharacterId) return null;
+  return s.characters.find(function(c){ return c.id === s.mainCharacterId; }) || null;
+}
+function buildPrompt(section, scene, prevScene, total, index){
+  var main = getMainCharacter(section);
+  var name = main ? main.name : "the character";
+  var desc = main && main.description ? main.description : "";
+  var lines = [];
+  lines.push("VERTICAL VIDEO 9:16 (portrait, 1080x1920 recommended) — SCENE "+(index+1)+" of "+total);
+  lines.push("MANDATORY ASPECT RATIO: 9:16 vertical. Do NOT output horizontal or square.");
+  lines.push("");
+  lines.push('CHARACTER: "'+name+'"');
+  if(desc) lines.push("CHARACTER DESCRIPTION: "+desc);
+  lines.push("Keep SAME face, SAME hairstyle, SAME skin tone, SAME wardrobe, SAME body proportions across all scenes.");
+  lines.push("");
+  lines.push('SCRIPT LINE: "'+(scene.text||"")+'"');
+  if(scene.speaker) lines.push('SPEAKER: "'+scene.speaker+'"');
+  lines.push("");
+  if(index > 0 && prevScene){
+    var lastWords = (prevScene.text||"").trim().split(/\s+/).slice(-10).join(" ");
+    var firstWords = (scene.text||"").trim().split(/\s+/).slice(0,10).join(" ");
+    lines.push("CONTINUITY: This scene is a DIRECT continuation of the previous scene.");
+    lines.push('Previous scene ended with: "…'+lastWords+'"');
+    lines.push('Current scene begins with: "'+firstWords+'…"');
+    lines.push("The camera has NOT moved, the lighting has NOT changed, the wardrobe has NOT changed.");
+    lines.push("DO NOT restart the action. DO NOT re-introduce the character.");
+  } else {
+    lines.push("OPENING SCENE: The character is in the reference position shown by the image.");
+  }
+  if(section === "avatar" && state.voice.enabled){
+    lines.push("");
+    lines.push("VOICE: "+state.voice.gender+", "+state.voice.age+", timbre "+state.voice.timbre+", pace "+state.voice.pace+", tone "+state.voice.tone+", accent "+state.voice.accent+".");
+    if(state.voice.description) lines.push("VOICE NOTES: "+state.voice.description);
+    lines.push("VOICE CONTINUITY: Use EXACTLY the same voice as all other scenes. Lip sync must match the spoken words.");
+  } else if(section === "avatar" && !state.voice.enabled){
+    lines.push("");
+    lines.push("AUDIO: SILENT. No voice, no speaking, no lip sync. Only subtle room ambience.");
+  }
+  lines.push("");
+  lines.push("CAMERA: Stable framing, portrait orientation, subject centered. Natural human movement. Subtle facial expressions.");
+  lines.push("LIGHTING: Consistent with the reference image.");
+  lines.push("ENVIRONMENT: Consistent with the reference image.");
+  lines.push("");
+  lines.push("DURATION: "+scene.durationSec.toFixed(2)+" seconds ("+scene.numFrames+" frames at 24fps).");
+  lines.push("");
+  lines.push("NEGATIVE: horizontal format, landscape, distorted hands, extra fingers, deformed face, duplicate person, inconsistent character, changing clothes, changing hairstyle, changing environment, changing lighting, camera shake, text overlay, watermark, logo, music, extra dialogue.");
+  return lines.join("\n");
+}
+function recalcAllPrompts(section){
+  var s = getSection(section);
+  s.scenes.forEach(function(sc, i){
+    sc.prompt = buildPrompt(section, sc, i > 0 ? s.scenes[i-1] : null, s.scenes.length, i);
+  });
+}
+</script>
+
+<script>
+/* ============================================================
+   BLOC I — RENDU SCÈNES
+   ============================================================ */
+function analyzeViralScript(){
+  var title = $("viral-title").value.trim();
+  var script = $("viral-script").value.trim();
+  if(!script){ toast("Script vide","warn"); return; }
+  var dur = Number($("viral-scene-duration").value) || 6;
+  state.viral.title = title || "Vidéo virale";
+  state.viral.script = script;
+  state.viral.sceneDuration = dur;
+  state.selectedDuration.viral = dur;
+  var texts = analyzeScriptToScenes(script, dur);
+  if(texts.length === 0){ toast("Aucune scène détectée","warn"); return; }
+  state.viral.scenes = texts.map(function(t){ return makeScene(t); });
+  recalcTimings(state.viral.scenes);
+  recalcAllPrompts("viral");
+  detectViralCharacters();
+  saveViral();
+  renderViral();
+  toast(texts.length+" scène(s) préparée(s)","success");
+}
+function analyzeAvatarScript(){
+  var title = $("avatar-title").value.trim();
+  var script = $("avatar-script").value.trim();
+  if(!script){ toast("Script vide","warn"); return; }
+  var dur = Number($("avatar-scene-duration").value) || 6;
+  state.avatar.title = title || "Vidéo Avatar";
+  state.avatar.script = script;
+  state.avatar.sceneDuration = dur;
+  state.selectedDuration.avatar = dur;
+  var texts = analyzeScriptToScenes(script, dur);
+  if(texts.length === 0){ toast("Aucune scène détectée","warn"); return; }
+  state.avatar.scenes = texts.map(function(t){ return makeScene(t); });
+  recalcTimings(state.avatar.scenes);
+  recalcAllPrompts("avatar");
+  detectAvatarCharacters();
+  saveAvatar();
+  renderAvatar();
+  toast(texts.length+" scène(s) préparée(s)","success");
+}
+
+function renderViral(){
+  var tEl = $("viral-title");
+  var sEl = $("viral-script");
+  if(document.activeElement !== tEl) tEl.value = state.viral.title || "";
+  if(document.activeElement !== sEl) sEl.value = state.viral.script || "";
+  var dEl = $("viral-scene-duration");
+  if(dEl) dEl.value = String(state.viral.sceneDuration || 6);
+  updateScriptStats("viral");
+  renderViralCharacters();
+  renderFlow("viral");
+  renderScenes("viral");
+  renderSectionDashboard("viral");
+}
+function renderAvatar(){
+  var tEl = $("avatar-title");
+  var sEl = $("avatar-script");
+  if(document.activeElement !== tEl) tEl.value = state.avatar.title || "";
+  if(document.activeElement !== sEl) sEl.value = state.avatar.script || "";
+  var dEl = $("avatar-scene-duration");
+  if(dEl) dEl.value = String(state.avatar.sceneDuration || 6);
+  updateScriptStats("avatar");
+  renderAvatarCharacters();
+  renderFlow("avatar");
+  renderScenes("avatar");
+  renderSectionDashboard("avatar");
+  var v = state.voice;
+  $("voice-enabled").value = v.enabled ? "true" : "false";
+  $("voice-gender").value = v.gender;
+  $("voice-age").value = v.age;
+  $("voice-timbre").value = v.timbre;
+  $("voice-pace").value = v.pace;
+  $("voice-tone").value = v.tone;
+  $("voice-accent").value = v.accent;
+  if(document.activeElement !== $("voice-description")) $("voice-description").value = v.description || "";
+}
+function updateScriptStats(section){
+  var s = getSection(section);
+  var w = wordCount(s.script);
+  var sec = w / WORDS_PER_SEC;
+  var el = $(section+"-script-stats");
+  if(el) el.textContent = w+" mot"+(w>1?"s":"")+" · ~"+sec.toFixed(1)+" s";
+}
+
+function readVoiceFromUI(){
+  state.voice.enabled = $("voice-enabled").value === "true";
+  state.voice.gender = $("voice-gender").value;
+  state.voice.age = $("voice-age").value;
+  state.voice.timbre = $("voice-timbre").value;
+  state.voice.pace = $("voice-pace").value;
+  state.voice.tone = $("voice-tone").value;
+  state.voice.accent = $("voice-accent").value;
+  state.voice.description = $("voice-description").value;
+  saveVoice();
+  if(state.avatar.scenes.length){
+    recalcAllPrompts("avatar");
+    saveAvatar();
+    renderScenes("avatar");
+  }
+}
+["voice-enabled","voice-gender","voice-age","voice-timbre","voice-pace","voice-tone","voice-accent"].forEach(function(id){
+  var el = $(id);
+  if(el) el.addEventListener("change", readVoiceFromUI);
+});
+$("voice-description").addEventListener("input", debounce(readVoiceFromUI, 500));
+
+function renderFlow(section){
+  var s = getSection(section);
+  var flow = $(section+"-flow");
+  var hint = $(section+"-progress-hint");
+  if(!flow) return;
+  if(s.scenes.length === 0){
+    flow.innerHTML = '<div class="empty"><span class="ico">—</span>Aucune scène. Écrivez un script et découpez-le.</div>';
+    if(hint) hint.textContent = "—";
+    return;
+  }
+  var done = s.scenes.filter(function(sc){ return sc.status==="done"; }).length;
+  if(hint) hint.textContent = done+"/"+s.scenes.length+" scène"+(s.scenes.length>1?"s":"")+" terminée"+(done>1?"s":"");
+  var prevDone = true;
+  flow.innerHTML = s.scenes.map(function(sc, i){
+    var cls = "prod-step";
+    var icon = "○";
+    var status = "";
+    if(sc.status === "done"){ cls += " done"; icon = "✓"; status = "Terminée"; prevDone = true; }
+    else if(sc.status === "processing"){ cls += " active"; icon = "◐"; status = "En cours"; prevDone = false; }
+    else if(sc.status === "ready"){ cls += prevDone ? " active" : " locked"; icon = "▶"; status = "Prête à générer"; prevDone = false; }
+    else if(sc.status === "waiting_image"){ cls += prevDone ? "" : " locked"; icon = "◌"; status = "En attente d'image"; prevDone = false; }
+    else if(sc.status === "failed"){ cls += ""; icon = "✕"; status = "Échec"; prevDone = false; }
+    var time = " · "+sc.durationSec.toFixed(1)+" s";
+    return '<div class="'+cls+'"><span class="ps-icon">'+icon+'</span><div class="ps-text"><b>Scène '+(i+1)+'</b><small>'+esc(sc.speaker || "—")+time+' · '+status+'</small></div></div>';
+  }).join('<div class="prod-arrow">↓</div>');
+}
+
+function renderScenes(section){
+  var s = getSection(section);
+  var list = $(section+"-scenes");
+  var hint = $(section+"-scenes-hint");
+  if(!list) return;
+  if(s.scenes.length === 0){
+    list.innerHTML = '<div class="empty"><span class="ico">—</span>Aucune scène préparée.</div>';
+    if(hint) hint.textContent = "0 scène";
+    return;
+  }
+  if(hint) hint.textContent = s.scenes.length+" scène"+(s.scenes.length>1?"s":"");
+
+  var playing = [];
+  list.querySelectorAll("video").forEach(function(v){
+    if(!v.paused && v.currentTime > 0) playing.push({src: v.currentSrc, t: v.currentTime});
+  });
+
+  var accessible = s.scenes.map(function(sc, i){
+    if(i === 0) return true;
+    return s.scenes[i-1].status === "done";
+  });
+
+  list.innerHTML = s.scenes.map(function(sc, i){
+    var canAccess = accessible[i];
+    var hasImage = !!sc.imageDataUri;
+    var badge = "";
+    if(sc.status === "done") badge = '<span class="badge ok">Terminée</span>';
+    else if(sc.status === "processing") badge = '<span class="badge warn">En cours</span>';
+    else if(sc.status === "ready") badge = '<span class="badge warn">Prête</span>';
+    else if(sc.status === "waiting_image") badge = '<span class="badge">Attente image</span>';
+    else if(sc.status === "failed") badge = '<span class="badge err">Échec</span>';
+    var spk = sc.speaker ? '<span class="badge dialogue">'+esc(sc.speaker)+'</span>' : '';
+    var time = sc.startSec.toFixed(1)+" → "+sc.endSec.toFixed(1)+" · "+sc.durationSec.toFixed(1)+"s";
+    var imgZone =
+      '<div class="scene-img-zone '+(hasImage?'has-img':'')+'">' +
+        (hasImage ? '<img src="'+esc(sc.imageDataUri)+'" alt="">' : '') +
+        '<div class="info">' +
+          '<b>'+(hasImage ? "Image de référence chargée" : "Aucune image")+'</b>' +
+          (hasImage ? "Elle sera envoyée à l'IA uniquement pour cette scène." : "Ajoutez une image avant de générer.") +
+        '</div>' +
+        '<label class="btn ghost">' +
+          (hasImage ? "Remplacer" : "Ajouter") +
+          '<input type="file" accept="image/*" onchange="handleSceneImage(\''+section+'\',\''+sc.id+'\',this.files[0])">' +
+        '</label>' +
+        (i > 0 && s.scenes[i-1].videoUrl ? '<button class="btn ghost" onclick="capturePrevFrame(\''+section+'\',\''+sc.id+'\')">Capturer scène '+i+'</button>' : '') +
+      '</div>';
+    var actions =
+      '<div class="actions">' +
+        '<button class="btn ghost sm" onclick="togglePrompt(\''+sc.id+'\')">Prompt</button>' +
+        '<button class="btn ghost sm" onclick="editSceneText(\''+section+'\',\''+sc.id+'\')">Éditer script</button>' +
+        '<button class="btn ghost sm" onclick="editPrompt(\''+section+'\',\''+sc.id+'\')">Éditer prompt</button>' +
+        '<button class="btn sm" onclick="generateScene(\''+section+'\',\''+sc.id+'\')" '+((!canAccess || !hasImage || sc.status==="processing" || sc.status==="done") ? "disabled" : "")+'>'+(sc.status==="done"?"Terminée":"Générer cette scène")+'</button>' +
+        (sc.status === "processing" ? '<button class="btn danger sm" onclick="stopGeneration()">Arrêter</button>' : '') +
+        (sc.status === "failed" ? '<button class="btn ghost sm" onclick="resetScene(\''+section+'\',\''+sc.id+'\')">Réessayer</button>' : '') +
+        '<span class="spacer"></span>' +
+        '<button class="icon-btn danger" onclick="deleteScene(\''+section+'\',\''+sc.id+'\')" title="Supprimer">✕</button>' +
+      '</div>';
+    var promptWrap =
+      '<div class="prompt-wrap" id="prompt-'+sc.id+'">' +
+        '<pre class="prompt" id="prompt-text-'+sc.id+'">'+esc(sc.prompt || "(prompt vide)")+'</pre>' +
+        '<div style="margin-top:.5rem;display:flex;gap:.4rem;flex-wrap:wrap">' +
+          '<button class="btn ghost sm" onclick="editPrompt(\''+section+'\',\''+sc.id+'\')">Éditer</button>' +
+          '<button class="btn ghost sm" data-copy-prompt="'+sc.id+'">Copier</button>' +
+        '</div>' +
+      '</div>';
+    var videoBlock = sc.videoUrl ?
+      '<div style="margin-top:.65rem">' +
+        '<video controls preload="metadata" playsinline style="width:100%;max-width:220px;border-radius:10px;background:#000"><source src="'+esc(sc.videoUrl)+'" type="video/mp4"></video>' +
+        '<div class="actions"><a class="btn ghost sm" href="'+esc(sc.videoUrl)+'" download style="text-decoration:none">Télécharger</a></div>' +
+      '</div>' : '';
+    return '<article class="scene-card '+sc.status+' '+(!canAccess?'locked':'')+'" data-scene-id="'+sc.id+'">' +
+      '<div class="head">' +
+        '<span class="num">SCÈNE '+(i+1)+'</span>' +
+        '<span class="time">'+time+'</span>' +
+        badge + spk +
+      '</div>' +
+      '<div class="text" data-scene-text="'+sc.id+'">'+esc(sc.text)+'</div>' +
+      imgZone + actions + promptWrap + videoBlock +
+    '</article>';
+  }).join("");
+
+  list.querySelectorAll("[data-copy-prompt]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var id = btn.getAttribute("data-copy-prompt");
+      var sc = s.scenes.find(function(x){ return x.id === id; });
+      if(sc) copyText(sc.prompt || "");
+    });
+  });
+
+  if(playing.length){
+    list.querySelectorAll("video").forEach(function(v){
+      var p = playing.find(function(x){ return x.src === v.currentSrc; });
+      if(p){
+        v.currentTime = p.t;
+        v.play().catch(function(){});
+      }
+    });
+  }
+}
+
+function togglePrompt(id){
+  var el = $("prompt-"+id);
+  if(el) el.classList.toggle("visible");
+}
+function editSceneText(section, id){
+  var s = getSection(section);
+  var sc = s.scenes.find(function(x){ return x.id===id; });
+  if(!sc) return;
+  openModal("Éditer le script de la scène",
+    '<label>Texte de la scène</label><textarea id="edit-sc-text" style="min-height:120px">'+esc(sc.text)+'</textarea>' +
+    '<p class="hint" style="margin-top:.5rem">Le prompt sera régénéré automatiquement après l\'enregistrement.</p>',
+    [{label:"Annuler",cls:"ghost"},{label:"Enregistrer",cls:"",onClick:function(){
+      var v = $("edit-sc-text").value.trim();
+      if(!v){ toast("Texte vide","warn"); return false; }
+      sc.text = v;
+      sc.speaker = detectSpeaker(v) || sc.speaker;
+      var sec = Math.min(estimateSec(v), 12);
+      sc.numFrames = framesForSec(sec || 3);
+      sc.durationSec = framesToSec(sc.numFrames);
+      recalcTimings(s.scenes);
+      recalcAllPrompts(section);
+      saveSection(section);
+      renderSection(section);
+    }}]
+  );
+}
+function editPrompt(section, id){
+  var s = getSection(section);
+  var sc = s.scenes.find(function(x){ return x.id===id; });
+  if(!sc) return;
+  openModal("Éditer le prompt",
+    '<textarea id="edit-pr-text" style="min-height:340px;font-family:ui-monospace,monospace;font-size:.72rem">'+esc(sc.prompt)+'</textarea>',
+    [
+      {label:"Annuler",cls:"ghost"},
+      {label:"Régénérer auto",cls:"ghost",onClick:function(){
+        var idx = s.scenes.indexOf(sc);
+        sc.prompt = buildPrompt(section, sc, idx>0?s.scenes[idx-1]:null, s.scenes.length, idx);
+        saveSection(section);
+        renderSection(section);
+        toast("Prompt régénéré","success");
+      }},
+      {label:"Enregistrer",cls:"",onClick:function(){
+        sc.prompt = $("edit-pr-text").value;
+        saveSection(section);
+        renderSection(section);
+        toast("Prompt enregistré","success");
+      }}
+    ],
+    {wide:true}
+  );
+}
+function deleteScene(section, id){
+  if(!confirm("Supprimer cette scène ?")) return;
+  var s = getSection(section);
+  s.scenes = s.scenes.filter(function(sc){ return sc.id!==id; });
+  recalcTimings(s.scenes);
+  recalcAllPrompts(section);
+  saveSection(section);
+  renderSection(section);
+}
+function resetScene(section, id){
+  var s = getSection(section);
+  var sc = s.scenes.find(function(x){ return x.id===id; });
+  if(!sc) return;
+  sc.status = sc.imageDataUri ? "ready" : "waiting_image";
+  sc.videoUrl = null;
+  sc.error = null;
+  sc.progress = null;
+  saveSection(section);
+  renderSection(section);
+}
+async function handleSceneImage(section, id, file){
+  if(!file) return;
+  if(!file.type.startsWith("image/")){ toast("Fichier non image","error"); return; }
+  if(file.size > 10*1024*1024){ toast("Image trop lourde (max 10 Mo)","error"); return; }
+  var s = getSection(section);
+  var sc = s.scenes.find(function(x){ return x.id===id; });
+  if(!sc) return;
+  var raw = await fileToDataUri(file);
+  var compressed = await compressImage(raw, 720, 0.78);
+  sc.imageDataUri = compressed;
+  if(sc.status === "waiting_image") sc.status = "ready";
+  saveSection(section);
+  renderSection(section);
+  toast("Image ajoutée à la scène","success");
+}
+function capturePrevFrame(section, id){
+  var s = getSection(section);
+  var idx = s.scenes.findIndex(function(x){ return x.id===id; });
+  if(idx <= 0) return;
+  var prev = s.scenes[idx-1];
+  if(!prev.videoUrl){ toast("La scène précédente n'a pas encore de vidéo","warn"); return; }
+  openModal("Capture de la dernière frame",
+    '<p class="hint" style="margin-bottom:.75rem">La capture se fait automatiquement à la fin de la vidéo (dernière frame utile). Si elle échoue (CORS), téléchargez la vidéo puis réuploadez-la dans la scène suivante via « Ajouter ».</p>' +
+    '<video id="capture-video" controls playsinline preload="metadata" crossorigin="anonymous" style="width:100%;max-width:280px;border-radius:10px;background:#000"><source src="'+esc(prev.videoUrl)+'" type="video/mp4"></video>',
+    [
+      {label:"Annuler",cls:"ghost"},
+      {label:"Capturer la dernière frame",cls:"",onClick:function(){
+        var v = $("capture-video");
+        try{
+          var dur = isFinite(v.duration) && v.duration > 0 ? v.duration : 0;
+          if(dur > 0) v.currentTime = Math.max(0, dur - 0.05);
+          var doCapture = function(){
+            var c = document.createElement("canvas");
+            c.width = v.videoWidth || 720;
+            c.height = v.videoHeight || 1280;
+            c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
+            var frame = c.toDataURL("image/jpeg", 0.8);
+            var sc = s.scenes.find(function(x){ return x.id===id; });
+            if(sc){
+              sc.imageDataUri = frame;
+              if(sc.status === "waiting_image") sc.status = "ready";
+              saveSection(section);
+              renderSection(section);
+              toast("Dernière frame capturée","success");
+            }
+          };
+          if(dur > 0){
+            var onSeeked = function(){ v.removeEventListener("seeked", onSeeked); doCapture(); };
+            v.addEventListener("seeked", onSeeked);
+            setTimeout(function(){
+              v.removeEventListener("seeked", onSeeked);
+              try{ doCapture(); }catch(e){}
+            }, 800);
+          }else{
+            doCapture();
+          }
+        }catch(e){
+          toast("Capture impossible : "+e.message,"error");
+        }
+      }}
+    ]
+  );
+}
+function copyText(t){
+  var val = String(t||"");
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(val).then(
+      function(){ toast("Copié","success"); },
+      function(){ fallbackCopy(val); }
+    );
+  }else{
+    fallbackCopy(val);
+  }
+}
+function fallbackCopy(val){
+  try{
+    var ta = document.createElement("textarea");
+    ta.value = val;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+    toast("Copié","success");
+  }catch(e){
+    toast("Copie impossible","error");
+  }
+}
+</script>
+
+<script>
+/* ============================================================
+   BLOC J — GÉNÉRATION SCÈNE PAR SCÈNE
+   ============================================================ */
+async function generateScene(section, id){
+  if(state.running){ toast("Une génération est déjà en cours","warn"); return; }
+  if(!getApiKey()){ toast("Clé API manquante","error"); go("settings"); return; }
+  var s = getSection(section);
+  var idx = s.scenes.findIndex(function(x){ return x.id===id; });
+  if(idx < 0) return;
+  var sc = s.scenes[idx];
+  if(idx > 0 && s.scenes[idx-1].status !== "done"){
+    toast("La scène précédente doit être terminée","warn");
+    return;
+  }
+  if(!sc.imageDataUri){
+    toast("Ajoutez d'abord une image de référence","warn");
+    return;
+  }
+  var wait = remainingCooldown();
+  if(wait > 0){
+    toast("Patientez "+wait+"s (1 vidéo / minute)","warn");
+    return;
+  }
+  state.running = true;
+  state.runningSection = section;
+  state.runningSceneId = id;
+  state.stopRequested = false;
+  sc.status = "processing";
+  sc.progress = "Création";
+  sc.error = null;
+  s.runningStartedAt = Date.now();
+  saveSection(section);
+  renderSection(section);
+  renderSectionDashboard(section);
+
+  var tickTimer = setInterval(function(){
+    if(!state.running) return;
+    renderSectionDashboard(section);
+    if(state.view === "dashboard") renderDashboard();
+  }, 1000);
+
+  try{
+    var body = {
+      model: MODEL_VIDEO,
+      prompt: sc.prompt,
+      image: sc.imageDataUri,
+      num_frames: sc.numFrames,
+      frame_rate: FRAME_RATE
+    };
+    var res = await apiFetch(BASE_URL+"/videos", {
+      method:"POST", headers: apiHeaders(), body: JSON.stringify(body)
+    });
+    if(!res.ok){
+      var t = "";
+      try { t = await res.text(); } catch(e){}
+      throw new Error("HTTP "+res.status+" — "+String(t).slice(0,160));
+    }
+    var data = await res.json();
+    var videoId = data.video_id || data.id || data.task_id;
+    if(!videoId) throw new Error("Aucun video_id retourné");
+    sc.videoId = videoId;
+    state.lastVideoRequestAt = Date.now();
+    localStorage.setItem(LS_KEYS.lastReq, state.lastVideoRequestAt);
+    sc.progress = "Génération";
+    saveSection(section);
+    renderSection(section);
+
+    var videoUrl = await pollVideo(videoId, function(progress, status){
+      if(state.stopRequested) return;
+      sc.progress = (progress !== null && progress !== undefined) ? (progress+"%") : (status || "en cours");
+      updateSceneProgressBadge(section, sc.id, sc.progress);
+      renderSectionDashboard(section);
+      if(state.view === "dashboard") renderDashboard();
+    });
+
+    sc.videoUrl = videoUrl;
+    sc.status = "done";
+    sc.progress = "Terminé";
+    s.lastRunDurationMs = Date.now() - (s.runningStartedAt || Date.now());
+    s.runningStartedAt = null;
+    state.videos.unshift({
+      id: uid("vid"),
+      category: section,
+      title: s.title || (section==="viral"?"Vidéo virale":"Vidéo Avatar"),
+      sceneIndex: idx+1,
+      totalScenes: s.scenes.length,
+      text: sc.text,
+      videoUrl: videoUrl,
+      createdAt: new Date().toISOString()
+    });
+    saveVideos();
+    toast("Scène "+(idx+1)+" générée en "+formatHMS(s.lastRunDurationMs),"success");
+  }catch(e){
+    sc.status = "failed";
+    sc.error = e.message;
+    sc.progress = "Échec";
+    s.runningStartedAt = null;
+    toast("Erreur : "+e.message,"error");
+  }finally{
+    clearInterval(tickTimer);
+    state.running = false;
+    state.runningSection = null;
+    state.runningSceneId = null;
+    state.stopRequested = false;
+    saveSection(section);
+    renderSection(section);
+    renderSectionDashboard(section);
+    if(state.view === "dashboard") renderDashboard();
+  }
+}
+
+function stopGeneration(){
+  if(!state.running){ toast("Aucune génération en cours","info"); return; }
+  state.stopRequested = true;
+  toast("Arrêt demandé — la tâche va être interrompue","warn");
+}
+
+function updateSceneProgressBadge(section, sceneId, text){
+  var list = $(section+"-scenes");
+  if(!list) return;
+  var card = list.querySelector('[data-scene-id="'+sceneId+'"]');
+  if(!card) return;
+  var badge = card.querySelector(".badge.warn");
+  if(badge) badge.textContent = "En cours "+text;
+}
+</script>
+
+<script>
+/* ============================================================
+   BLOC K — TABLEAU DE BORD
+   ============================================================ */
+function computeStats(section){
+  var s = getSection(section);
+  var total = s.scenes.length;
+  var done = s.scenes.filter(function(x){ return x.status==="done"; }).length;
+  var failed = s.scenes.filter(function(x){ return x.status==="failed"; }).length;
+  var processing = s.scenes.filter(function(x){ return x.status==="processing"; }).length;
+  var ready = s.scenes.filter(function(x){ return x.status==="ready"; }).length;
+  var waiting = s.scenes.filter(function(x){ return x.status==="waiting_image"; }).length;
+  var pct = total === 0 ? 0 : Math.round((done/total)*100);
+  return { total: total, done: done, failed: failed, processing: processing, ready: ready, waiting: waiting, pct: pct };
+}
+function computeGlobalStats(){
+  var v = computeStats("viral");
+  var a = computeStats("avatar");
+  var totalVideos = state.videos.length;
+  var videosViral = state.videos.filter(function(x){ return x.category==="viral"; }).length;
+  var videosAvatar = state.videos.filter(function(x){ return x.category==="avatar"; }).length;
+  return {
+    viral: v, avatar: a,
+    totalScenes: v.total + a.total,
+    totalDone: v.done + a.done,
+    totalFailed: v.failed + a.failed,
+    totalProcessing: v.processing + a.processing,
+    totalReady: v.ready + a.ready,
+    totalWaiting: v.waiting + a.waiting,
+    pct: (v.total + a.total) === 0 ? 0 : Math.round(((v.done + a.done) / (v.total + a.total))*100),
+    totalVideos: totalVideos, videosViral: videosViral, videosAvatar: videosAvatar
+  };
+}
+function dashHTML(stats, opts){
+  opts = opts || {};
+  var live = state.running && (!opts.section || state.runningSection === opts.section);
+  var startAt = opts.section ? getSection(opts.section).runningStartedAt : null;
+  var elapsedMs = 0;
+  if(live && startAt){
+    elapsedMs = Date.now() - startAt;
+  }else if(opts.section){
+    elapsedMs = getSection(opts.section).lastRunDurationMs || 0;
+  }else{
+    elapsedMs = Math.max(state.viral.lastRunDurationMs||0, state.avatar.lastRunDurationMs||0);
+  }
+  var remaining = stats.total - stats.done;
+  var liveTag = live
+    ? '<span class="dash-live"><span class="pulse"></span> GÉNÉRATION EN COURS · <span class="dash-timer" data-elapsed-start="'+startAt+'">'+formatHMS(elapsedMs)+'</span></span>'
+    : '<span class="dash-live idle"><span class="pulse"></span> '+(opts.section ? "Dernière durée : " : "Dernière durée max : ")+'<span class="dash-timer">'+formatHMS(elapsedMs)+'</span></span>';
+
+  var wait = remainingCooldown();
+  var cooldownTag = wait > 0
+    ? '<span class="chip warn">Cooldown API : '+wait+'s</span>'
+    : '<span class="chip ok">API prête</span>';
+
+  return '' +
+    '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem;justify-content:space-between;align-items:center">' +
+      '<div style="display:flex;gap:.5rem;flex-wrap:wrap">'+liveTag+' '+cooldownTag+'</div>' +
+      '<span class="chip info">'+stats.done+'/'+stats.total+' scènes terminées</span>' +
+    '</div>' +
+    '<div class="dash-grid">' +
+      '<div class="dash-stat">' +
+        '<div class="ds-label">Progression</div>' +
+        '<div class="ds-value">'+stats.pct+'%</div>' +
+        '<div class="ds-sub">'+stats.done+' terminée'+(stats.done>1?"s":"")+' / '+stats.total+'</div>' +
+      '</div>' +
+      '<div class="dash-stat">' +
+        '<div class="ds-label">Temps écoulé</div>' +
+        '<div class="ds-value"><span class="dash-timer" '+(live&&startAt?'data-elapsed-start="'+startAt+'"':'')+'>'+formatHMS(elapsedMs)+'</span></div>' +
+        '<div class="ds-sub">'+(live ? "En cours" : "Dernier run")+'</div>' +
+      '</div>' +
+      '<div class="dash-stat">' +
+        '<div class="ds-label">Scènes restantes</div>' +
+        '<div class="ds-value">'+remaining+'</div>' +
+        '<div class="ds-sub">'+stats.processing+' en cours · '+stats.failed+' échec'+(stats.failed>1?"s":"")+'</div>' +
+      '</div>' +
+      '<div class="dash-stat">' +
+        '<div class="ds-label">Vidéos générées</div>' +
+        '<div class="ds-value">'+(opts.videosCount !== undefined ? opts.videosCount : stats.done)+'</div>' +
+        '<div class="ds-sub">'+(opts.videosSub || "dans cette section")+'</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="dash-bar"><div class="dash-bar-fill '+(stats.pct===100?'done':'')+'" style="width:'+stats.pct+'%"></div></div>' +
+    '<div class="dash-legend">' +
+      '<span>Terminées : <b>'+stats.done+'</b></span>' +
+      '<span>En cours : <b>'+stats.processing+'</b></span>' +
+      '<span>Prêtes : <b>'+stats.ready+'</b></span>' +
+      '<span>Attente image : <b>'+stats.waiting+'</b></span>' +
+      '<span>Échecs : <b>'+stats.failed+'</b></span>' +
+    '</div>';
+}
+function renderSectionDashboard(section){
+  var el = $(section+"-dashboard");
+  var liveEl = $(section+"-dash-live");
+  if(!el) return;
+  var stats = computeStats(section);
+  if(liveEl){
+    liveEl.textContent = stats.total === 0
+      ? "Aucune scène"
+      : stats.done+"/"+stats.total+" · "+stats.pct+"%";
+  }
+  el.innerHTML = dashHTML(stats, {
+    section: section,
+    videosCount: state.videos.filter(function(v){ return v.category===section; }).length,
+    videosSub: "dans cette section"
+  });
+}
+function renderDashboard(){
+  var content = $("dash-content");
+  var title = $("dash-title");
+  var liveEl = $("dash-live");
+  if(!content) return;
+  if(state.dashTab === "global"){
+    if(title) title.textContent = "Tableau de bord global";
+    var g = computeGlobalStats();
+    if(liveEl) liveEl.textContent = g.pct+"% · "+g.totalVideos+" vidéos";
+    var stats = {
+      total: g.totalScenes,
+      done: g.totalDone,
+      failed: g.totalFailed,
+      processing: g.totalProcessing,
+      ready: g.totalReady,
+      waiting: g.totalWaiting,
+      pct: g.pct
+    };
+    content.innerHTML = dashHTML(stats, {
+      videosCount: g.totalVideos,
+      videosSub: "Virale : "+g.videosViral+" · Avatar : "+g.videosAvatar
+    });
+  }else{
+    var section = state.dashTab;
+    if(title) title.textContent = section === "viral" ? "Tableau de bord — Vidéo virale" : "Tableau de bord — Avatar";
+    var stats2 = computeStats(section);
+    if(liveEl) liveEl.textContent = stats2.pct+"% · "+stats2.done+"/"+stats2.total;
+    content.innerHTML = dashHTML(stats2, {
+      section: section,
+      videosCount: state.videos.filter(function(v){ return v.category===section; }).length,
+      videosSub: "dans cette section"
+    });
+  }
+  startDashTimer();
+}
+function switchDashTab(tab){
+  state.dashTab = tab;
+  document.querySelectorAll("[data-dtab]").forEach(function(b){ b.classList.toggle("active", b.dataset.dtab===tab); });
+  renderDashboard();
+}
+
+var dashTimerHandle = null;
+function startDashTimer(){
+  if(dashTimerHandle) return;
+  dashTimerHandle = setInterval(function(){
+    var nodes = document.querySelectorAll("[data-elapsed-start]");
+    var anyLive = false;
+    nodes.forEach(function(n){
+      var start = Number(n.getAttribute("data-elapsed-start"));
+      if(start){
+        n.textContent = formatHMS(Date.now() - start);
+        anyLive = true;
+      }
+    });
+    if(!anyLive && !state.running){
+      clearInterval(dashTimerHandle);
+      dashTimerHandle = null;
+    }
+  }, 1000);
+}
+</script>
+
+<script>
+/* ============================================================
+   BLOC L — MES VIDÉOS
+   ============================================================ */
+function switchVideoTab(tab){
+  state.activeTab = tab;
+  document.querySelectorAll("[data-vtab]").forEach(function(b){ b.classList.toggle("active", b.dataset.vtab===tab); });
+  $("videos-viral").classList.toggle("hidden", tab!=="viral");
+  $("videos-avatar").classList.toggle("hidden", tab!=="avatar");
+}
+function renderVideos(){
+  ["viral","avatar"].forEach(function(cat){
+    var grid = $("videos-"+cat);
+    var items = state.videos.filter(function(v){ return v.category===cat; });
+    if(items.length === 0){
+      grid.innerHTML = '<div class="empty"><span class="ico">—</span>Aucune vidéo '+(cat==="viral"?"virale":"avatar")+' pour l\'instant.</div>';
+      return;
+    }
+    grid.innerHTML = items.map(function(v){
+      return '<div class="video-card">' +
+        '<video controls preload="metadata" playsinline><source src="'+esc(v.videoUrl)+'" type="video/mp4"></video>' +
+        '<div class="vc-body">' +
+          '<div class="vc-title">'+esc(v.title)+'</div>' +
+          '<div class="vc-meta">Scène '+v.sceneIndex+'/'+v.totalScenes+' · '+new Date(v.createdAt).toLocaleDateString("fr-FR")+'</div>' +
+          '<div class="actions">' +
+            '<a class="btn ghost sm" href="'+esc(v.videoUrl)+'" download style="text-decoration:none">Télécharger</a>' +
+            '<button class="btn danger sm" onclick="deleteVideo(\''+v.id+'\')">Supprimer</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join("");
+  });
+}
+function deleteVideo(id){
+  if(!confirm("Supprimer cette vidéo de l'archive ?")) return;
+  state.videos = state.videos.filter(function(v){ return v.id!==id; });
+  saveVideos();
+  renderVideos();
+  renderDashboard();
+}
+</script>
+
+<script>
+/* ============================================================
+   BLOC M — BIBLIOTHÈQUE SCRIPTS
+   ============================================================ */
+function saveViralScriptToLibrary(){
+  var title = $("viral-title").value.trim() || "Script viral";
+  var content = $("viral-script").value.trim();
+  if(!content){ toast("Script vide","warn"); return; }
+  state.scripts.unshift({ id: uid("scr"), title: title, content: content, type:"viral", createdAt:new Date().toISOString() });
+  saveScripts();
+  renderScripts();
+  toast("Script sauvegardé","success");
+}
+function saveAvatarScriptToLibrary(){
+  var title = $("avatar-title").value.trim() || "Script avatar";
+  var content = $("avatar-script").value.trim();
+  if(!content){ toast("Script vide","warn"); return; }
+  state.scripts.unshift({ id: uid("scr"), title: title, content: content, type:"avatar", createdAt:new Date().toISOString() });
+  saveScripts();
+  renderScripts();
+  toast("Script sauvegardé","success");
+}
+function renderScripts(){
+  var list = $("scripts-list");
+  var count = $("scripts-count");
+  if(count) count.textContent = state.scripts.length+" script"+(state.scripts.length>1?"s":"");
+  if(state.scripts.length === 0){
+    list.innerHTML = '<div class="empty"><span class="ico">—</span>Aucun script sauvegardé.</div>';
+    return;
+  }
+  list.innerHTML = state.scripts.map(function(sc){
+    return '<article class="card" style="margin-bottom:0">' +
+      '<div class="card-title"><h3 style="font-size:.92rem">'+esc(sc.title)+'</h3><span class="chip '+(sc.type==="avatar"?"info":"")+'">'+(sc.type==="avatar"?"Avatar":"Virale")+'</span></div>' +
+      '<p class="hint" style="max-height:80px;overflow:hidden">'+esc(sc.content.slice(0,220))+(sc.content.length>220?"…":"")+'</p>' +
+      '<div class="actions">' +
+        '<button class="btn ghost sm" onclick="loadScriptInto(\''+sc.id+'\',\'viral\')">Vidéo virale</button>' +
+        '<button class="btn ghost sm" onclick="loadScriptInto(\''+sc.id+'\',\'avatar\')">Avatar</button>' +
+        '<button class="btn danger sm" onclick="deleteScript(\''+sc.id+'\')">Supprimer</button>' +
+      '</div>' +
+    '</article>';
+  }).join("");
+}
+function openScriptLibrary(){ go("scripts"); }
+function loadScriptInto(id, target){
+  var sc = state.scripts.find(function(x){ return x.id===id; });
+  if(!sc) return;
+  if(target === "viral"){
+    $("viral-title").value = sc.title;
+    $("viral-script").value = sc.content;
+    state.viral.title = sc.title;
+    state.viral.script = sc.content;
+    saveViral();
+    go("viral");
+    toast("Script chargé dans Vidéo virale","success");
+  }else{
+    $("avatar-title").value = sc.title;
+    $("avatar-script").value = sc.content;
+    state.avatar.title = sc.title;
+    state.avatar.script = sc.content;
+    saveAvatar();
+    go("avatar");
+    toast("Script chargé dans Avatar","success");
+  }
+}
+function deleteScript(id){
+  if(!confirm("Supprimer ce script ?")) return;
+  state.scripts = state.scripts.filter(function(s){ return s.id!==id; });
+  saveScripts();
+  renderScripts();
+}
+</script>
+
+<script>
+/* ============================================================
+   BLOC N — EXPORT / RESET
+   ============================================================ */
+function exportAllData(){
+  var data = {
+    exportedAt: new Date().toISOString(),
+    viral: state.viral,
+    avatar: state.avatar,
+    videos: state.videos,
+    scripts: state.scripts,
+    voice: state.voice
+  };
+  var blob = new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "man-business-studio-export.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast("Export généré","success");
+}
+function resetAllData(){
+  if(!confirm("Effacer toutes les données locales (scripts, scènes, images, vidéos, clé API) ?")) return;
+  Object.values(LS_KEYS).forEach(function(k){ localStorage.removeItem(k); });
+  location.reload();
+}
+</script>
+
+<script>
+/* ============================================================
+   BLOC O — INIT
+   ============================================================ */
+(function init(){
+  if(getApiKey()) $("api-key").value = getApiKey();
+  updateApiChip();
+  renderViral();
+  renderAvatar();
+  renderVideos();
+  renderScripts();
+  renderDashboard();
+  switchVideoTab("viral");
+  logTo("log-viral","MAN BUSINESS STUDIO — prêt","ok");
+  logTo("log-avatar","MAN BUSINESS STUDIO — prêt","ok");
+  logTo("log-settings","MAN BUSINESS STUDIO — prêt","ok");
+  setInterval(function(){
+    if(state.view === "dashboard") renderDashboard();
+    if(state.running){
+      renderSectionDashboard(state.runningSection);
+    }
+  }, 2000);
+})();
+</script>
+
+</body>
+</html>
